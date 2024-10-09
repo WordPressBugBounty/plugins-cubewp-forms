@@ -60,10 +60,9 @@ class CubeWp_Forms_Dashboard
             }
         }
         $form_details=$data;
-        $output='';
         $output = '<div class="cwp-dashboard-leads-container">';
-        $output=self::lead_details($form_details);
-        $output.=self::cwp_form_data_sidebar();
+        $output .= self::lead_details($form_details);
+        $output .= self::cwp_form_data_sidebar();
         $output .= '</div>';
         return $output;
     }
@@ -88,15 +87,10 @@ class CubeWp_Forms_Dashboard
             $output.=self::cwp_lead_tabs_content($form_details);
             $output .='</div>';
         }else{
-            $output = '';
-            $output .= ob_start();
-?>
-            <div class="cwp-empty-posts"><img class="cwp-empty-img" src="<?php echo  esc_url(CWP_PLUGIN_URI . 'cube/assets/frontend/images/no-result.png') ?>" alt="">
-                <h2><?php echo esc_html__("No Leads Found", "cubewp-forms"); ?></h2>
-                <p><?php echo esc_html__("There are no leads found.", "cubewp-forms"); ?></p>
-            </div>
-        <?php
-            $output .= ob_get_clean();
+            $output ='<div class="cwp-empty-posts"><img class="cwp-empty-img" src="'.esc_url(CWP_PLUGIN_URI . 'cube/assets/frontend/images/no-result.png').'" alt="">
+                <h2>'.esc_html__("No Leads Found", "cubewp-forms").'</h2>
+                <p>'.esc_html__("There are no leads found.", "cubewp-forms").'</p>
+            </div>';
         }
         return $output;
     }

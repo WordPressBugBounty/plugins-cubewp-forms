@@ -57,11 +57,13 @@
 		}
 
 		// Load data by default
-		var defaultSelectedOptions = $('#admin_email_post_types').val();
-		getEmailTemplateData(defaultSelectedOptions);
-
+		if($('body').hasClass('post-new-php') && $('body').hasClass('post-type-email_template_forms')){
+			var defaultSelectedOptions = $('#forms_types').val();
+			getEmailTemplateData(defaultSelectedOptions);
+		}
+		
 		// Listen for changes in the select field
-		$('#admin_email_post_types').on('change', function() {
+		$('.post-type-email_template_forms.post-new-php #forms_types').on('change', function() {
 			// Get the selected option values
 			var selectedOptions = $(this).val();
 
@@ -79,7 +81,7 @@
 			jQuery.ajax({
 				type: 'POST',
 				url: cwp_vars_params.ajax_url,
-				data:'action=cwp_import_dummy_data&data_type=dummy',
+				data:'action=cwp_import_dummy_data&data_type=&nonce='+cwp_vars_params.nonce,
 				dataType: 'json',
 				success: function (response) {
 					if( response.success === 'true' ){
