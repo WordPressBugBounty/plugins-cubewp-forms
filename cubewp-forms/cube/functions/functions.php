@@ -559,6 +559,15 @@ function cubewp_forms_display_errors_page()
 add_action('wp_ajax_clear_mailchimp_logs', 'clear_mailchimp_logs');
 function clear_mailchimp_logs()
 {
+	
+	if ( ! current_user_can('manage_options') ) {
+        wp_send_json_error('Unauthorized access', 403);
+    }
+	
+	if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cubewp-admin-nonce')) {
+		wp_send_json_error('Invalid nonce', 403);
+	}
+		
     global $wpdb;
     $table_name = $wpdb->prefix . 'cubewp_mailchimp_errors';
     $wpdb->query("TRUNCATE TABLE $table_name");

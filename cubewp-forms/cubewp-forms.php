@@ -3,7 +3,7 @@
  * Plugin Name: CubeWP Forms
  * Plugin URI: https://cubewp.com/
  * Description: LeadGen & Contact Form by CubeWP – Drag & Drop Form Builder for WordPress
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: CubeWP
  * Author URI: https://CubeWp.com
  * Text Domain: cubewp-forms

@@ -25,7 +25,8 @@
 					url: ajaxurl, // Use the WordPress AJAX URL
 					type: 'POST',
 					data: {
-						action: 'clear_mailchimp_logs' // WordPress AJAX action name
+						action: 'clear_mailchimp_logs', // WordPress AJAX action name
+                        'nonce': cwp_vars_params.nonce
 					},
 					success: function(response) {
 						// Reload the page after clearing the logs
