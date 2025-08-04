@@ -24,7 +24,7 @@ class CubeWp_Forms_Custom {
 	 *
 	 * @var string
 	 */
-	public static $CubeWp_Forms_version = '1.1.6';
+	public static $CubeWp_Forms_version = '1.1.7';
 	/**
 	 * The single instance of the class.
 	 *
@@ -59,6 +59,7 @@ class CubeWp_Forms_Custom {
 	 */
 	public function includes() {
 		require_once CWP_FORMS_PLUGIN_DIR . 'cube/functions/functions.php';
+		add_action('init', array('CubeWp_Forms_Elementor', 'init'), 9);
 		if ( CWP()->is_request( 'frontend' ) ) {
 			self::frontend_includes();
 		}
