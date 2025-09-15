@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cubewp-framework\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 17:58+0500\n"
+"POT-Creation-Date: 2025-09-15 22:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: cland <cubewp@gmail.com>\n"
 "Language-Team: Cridio <contact@cubewp.com>\n"
@@ -14,12 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
 "POT-Revision-Date: Tue Mar 08 2016 16:05:54 GMT+0500 (Pakistan Standard Time)\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.5\n"
-"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;"
-"_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;"
-"_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;"
-"esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;"
-"comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Generator: Poedit 3.7\n"
+"X-Poedit-KeywordsList: "
+"_:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -67,7 +64,7 @@ msgid "View Details"
 msgstr ""
 
 #: cube/classes/class-cubewp-forms-dashboard.php:253
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:235
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:232
 msgid "Sorry! Security Verification Failed."
 msgstr ""
 
@@ -211,20 +208,20 @@ msgstr ""
 msgid "Form Type"
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:106
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:103
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:791
 msgid "Submit"
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:284
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:281
 msgid "Form Entry Details"
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:375
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:372
 msgid "Success! The submission was successful."
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:426
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:423
 #, php-format
 msgid "You have received a new entry from %s"
 msgstr ""
@@ -422,7 +419,6 @@ msgid "Form Submit Button Width"
 msgstr ""
 
 #: cube/classes/class-cubewp-forms-ui.php:308
-#, no-php-format
 msgid ""
 "This option will add width for submit button on form submission. Give width in "
 "% or px."

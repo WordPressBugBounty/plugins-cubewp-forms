@@ -228,7 +228,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'form_container_padding',
             [
                 'label'      => __('Padding', 'cubewp-forms'),
@@ -240,7 +240,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'form_container_margin',
             [
                 'label'      => __('Margin', 'cubewp-forms'),
@@ -312,7 +312,7 @@ class CubeWP_Forms_Widget extends Widget_Base
         );
 
         // **New Control: Form Section Content Padding**
-        $this->add_control(
+        $this->add_responsive_control(
             'form_section_content_padding',
             [
                 'label'      => __('Padding', 'cubewp-forms'),
@@ -325,7 +325,7 @@ class CubeWP_Forms_Widget extends Widget_Base
         );
 
         // **New Control: Form Section Content Margin**
-        $this->add_control(
+        $this->add_responsive_control(
             'form_section_content_margin',
             [
                 'label'      => __('Margin', 'cubewp-forms'),
@@ -372,7 +372,7 @@ class CubeWP_Forms_Widget extends Widget_Base
                 ],
             ]
         );
-        $this->add_control(
+        $this->add_responsive_control(
             'form_fields_margin_content',
             [
                 'label'      => __('Margin', 'cubewp-forms'),
@@ -438,7 +438,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'field_container_padding',
             [
                 'label'      => __('Padding', 'cubewp-forms'),
@@ -450,7 +450,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'field_container_margin',
             [
                 'label'      => __('Margin', 'cubewp-forms'),
@@ -516,7 +516,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'form_label_margin',
             [
                 'label'      => __('Margin', 'cubewp-forms'),
@@ -684,7 +684,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'form_fields_padding',
             [
                 'label'      => __('Padding', 'cubewp-forms'),
@@ -704,7 +704,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'form_fields_margin',
             [
                 'label'      => __('Margin', 'cubewp-forms'),
@@ -1055,7 +1055,7 @@ class CubeWP_Forms_Widget extends Widget_Base
         $this->end_controls_tabs(); // End Tabs
 
         // Controls outside of tabs (apply to both normal and hover if not overridden)
-        $this->add_control(
+        $this->add_responsive_control(
             'submit_button_padding',
             [
                 'label'      => __('Padding', 'cubewp-forms'),
@@ -1068,7 +1068,7 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        $this->add_responsive_control(
             'submit_button_margin',
             [
                 'label'      => __('Margin', 'cubewp-forms'),

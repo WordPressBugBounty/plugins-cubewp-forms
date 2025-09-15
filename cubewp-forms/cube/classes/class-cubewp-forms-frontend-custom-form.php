@@ -58,9 +58,6 @@ class CubeWp_Forms_Frontend_Custom_Form
      */
     public function frontend_form($params = array(), $content = null)
     {
-        if (is_admin()) {
-            return '';
-        }
         // default parameters
         extract(
             shortcode_atts(array(

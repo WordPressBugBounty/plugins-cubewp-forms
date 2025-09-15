@@ -5,7 +5,7 @@ Tags: Contact form, Lead form, leads management, custom fields, conditional fiel
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 License: GPLv2 or later
 
 CubeWP Forms is a 100% free drag-and-drop builder for creating contact forms, lead gen forms, appointment request forms, and newsletter signup forms.
@@ -251,6 +251,11 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+= 1.1.8 2025-09-15
+
+* ADDED: Responsive controls in CubeWP Forms Widget.
+* FIXED: CubeWP Forms now visible in Elementor editor by removing unnecessary is_admin check.
 
 = 1.1.7 2025-08-04
 
