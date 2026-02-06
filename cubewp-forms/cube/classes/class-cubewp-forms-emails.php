@@ -131,10 +131,10 @@ class CubeWp_Forms_Emails
 	public function remove_view_email_template_action($messages)
 	{
 		if (isset($messages[self::$post_type])) {
-			$messages[self::$post_type][1]  = esc_html__('Email Template updated.', 'cubewp-frontend');
-			$messages[self::$post_type][6]  = esc_html__('Email Template published.', 'cubewp-frontend');
-			$messages[self::$post_type][8]  = esc_html__('Email Template submitted.', 'cubewp-frontend');
-			$messages[self::$post_type][10] = esc_html__('Email Template draft updated.', 'cubewp-frontend');
+			$messages[self::$post_type][1]  = esc_html__('Email Template updated.', 'cubewp-forms');
+			$messages[self::$post_type][6]  = esc_html__('Email Template published.', 'cubewp-forms');
+			$messages[self::$post_type][8]  = esc_html__('Email Template submitted.', 'cubewp-forms');
+			$messages[self::$post_type][10] = esc_html__('Email Template draft updated.', 'cubewp-forms');
 		}
 
 		return $messages;
@@ -151,8 +151,8 @@ class CubeWp_Forms_Emails
 
 	public function email_post_type_columns($columns)
 	{
-		$new_column['email_recipient'] = esc_html__('Email Recipient', 'cubewp-frontend');
-		$new_column['email_type']      = esc_html__('Email Type', 'cubewp-frontend');
+		$new_column['email_recipient'] = esc_html__('Email Recipient', 'cubewp-forms');
+		$new_column['email_type']      = esc_html__('Email Type', 'cubewp-forms');
 		$position                      = array_search('date', array_keys($columns));
 
 		return array_slice($columns, 0, $position, true) + $new_column + array_slice($columns, $position, null, true);
@@ -161,11 +161,12 @@ class CubeWp_Forms_Emails
 	public function email_post_type_column_content($column, $post_id)
 	{
 		if ('email_recipient' == $column || 'email_type' == $column) {
-			$email_recipient = get_post_meta($post_id, 'email_recipient', true);
+			$email_recipient = get_post_meta($post_id, 'forms_email_recipient', true);
 			if ('email_recipient' == $column) {
-				echo esc_html($email_recipient);
+				echo esc_html(ucfirst($email_recipient));
 			} else {
 				$email_type = get_post_meta($post_id, 'admin_email_post_types', true);
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo get_the_title($email_type);
 			}
 		}
@@ -175,7 +176,7 @@ class CubeWp_Forms_Emails
 	{
 		$post_type = $post->post_type;
 		if ($post_type == 'email_template_forms' && empty($content)) {
-			return esc_html__('Email Content', 'cubewp-frontend');
+			return esc_html__('Email Content', 'cubewp-forms');
 		}
 
 		return $content;
@@ -185,7 +186,7 @@ class CubeWp_Forms_Emails
 	{
 		$post_type = $post->post_type;
 		if ($post_type == 'email_template_forms') {
-			return esc_html__('Email Subject', 'cubewp-frontend');
+			return esc_html__('Email Subject', 'cubewp-forms');
 		}
 
 		return $title_placeholder;
@@ -194,7 +195,7 @@ class CubeWp_Forms_Emails
 	public function cubewp_email_template_shortcodes_metabox()
 	{
 
-		add_meta_box('cubewp-email-template-shortcodes-metabox', __('Shortcodes', 'cubewp-frontend'), array(
+		add_meta_box('cubewp-email-template-shortcodes-metabox', __('Shortcodes', 'cubewp-forms'), array(
 			$this,
 			'cubewp_email_template_shortcode_metabox_render'
 		), self::$post_type, 'side');
@@ -229,11 +230,11 @@ class CubeWp_Forms_Emails
 	{
 		$shortcodes   = array();
 		$shortcodes[] = array(
-			'label'     => esc_html__('Website Title', 'cubewp-frontend'),
+			'label'     => esc_html__('Website Title', 'cubewp-forms'),
 			'shortcode' => '{website_title}',
 		);
 		$shortcodes[] = array(
-			'label'     => esc_html__('Website URL', 'cubewp-frontend'),
+			'label'     => esc_html__('Website URL', 'cubewp-forms'),
 			'shortcode' => '{website_url}',
 		);
 
@@ -244,8 +245,8 @@ class CubeWp_Forms_Emails
 	{
 
 		$post_types[self::$post_type] = array(
-			'label'               => esc_html__('Email Templates', 'cubewp-frontend'),
-			'singular'            => esc_html__('Email Template', 'cubewp-frontend'),
+			'label'               => esc_html__('Email Templates', 'cubewp-forms'),
+			'singular'            => esc_html__('Email Template', 'cubewp-forms'),
 			'icon'                => 'dashicons-email',
 			'slug'                => self::$post_type,
 			'description'         => '',
@@ -282,7 +283,9 @@ class CubeWp_Forms_Emails
 			'post_status' => 'private',
 			'fields'      => 'id',
 			'numberposts' => 1,
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key	 ,WordPress.DB.SlowDBQuery.slow_db_query_meta_value	
 			'meta_key'    => '_cwp_group_types',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value	
 			'meta_value'  => 'email_template_forms',
 		));
 
@@ -298,6 +301,7 @@ class CubeWp_Forms_Emails
 				'post_type'    => 'cwp_form_fields'
 			);
 			// Insert the post into the database
+		
 			$settings_id = wp_insert_post($settings);
 			update_post_meta($settings_id, '_cwp_group_visibility', 'secure');
 			update_post_meta($settings_id, '_cwp_group_types', 'email_template_forms');
@@ -305,14 +309,25 @@ class CubeWp_Forms_Emails
 			$save_fields = true;
 		}
 		$form_fields = get_option('cwp_custom_fields');
-		if (!empty($settings_id) && isset($form_fields['forms_types'])) {
-			$forms_types = $form_fields['forms_types'];
-			$forms   = self::cubewp_email_forms();
-			$options = isset($forms_types['options']) ?  json_decode($forms_types['options'], true) : array();
-			if (isset($options['label']) && is_array($options['label']) && isset($forms['label']) && is_array($forms['label'])) {
-				if (count($forms['label']) != count($options['label'])) {
-					$save_fields = true;
+		if (!empty($settings_id)) {
+			$forms = self::cubewp_email_forms();
+			
+			$existing_options = array();
+			if (isset($form_fields['forms_types']['options'])) {
+				$decoded = json_decode($form_fields['forms_types']['options'], true);
+				if (is_array($decoded)) {
+					$existing_options = $decoded;
 				}
+			}
+			$has_forms    = isset($forms['label']) && is_array($forms['label']) && count($forms['label']) > 0;
+			$has_existing = isset($existing_options['label']) && is_array($existing_options['label']) && count($existing_options['label']) > 0;
+
+			// Regenerate when no stored options exist yet, or when counts differ
+			if ($has_forms && ( ! $has_existing || count($forms['label']) !== count($existing_options['label']) )) {
+                $save_fields = true;
+            } elseif( ! $has_forms && $has_existing ) {
+				// No forms exist but options do, so we need to clear them out
+				$save_fields = true;
 			}
 		}
 
@@ -339,8 +354,8 @@ class CubeWp_Forms_Emails
 			'placeholder'          => '',
 			'options'              => json_encode(array(
 				'label' => array(
-					esc_html__('Admin', 'cubewp-frontend'),
-					esc_html__('User', 'cubewp-frontend'),
+					esc_html__('Admin', 'cubewp-forms'),
+					esc_html__('User', 'cubewp-forms'),
 				),
 				'value' => array(
 					'admin',
@@ -362,11 +377,15 @@ class CubeWp_Forms_Emails
 			'group_id'             => $settings_id
 		);
 		$forms                       = self::cubewp_email_forms();
+		$description = '';
+		if ( empty( $forms['label'] ) ) {
+			$description = esc_html__('No forms found. Please create a form first.', 'cubewp-forms');
+		}
 		$fields['forms_types'] = array(
-			'label'                => __('Form Type', 'cubewp-classified'),
+			'label'                => __('Form Type', 'cubewp-forms'),
 			'name'                 => 'forms_types',
 			'type'                 => 'dropdown',
-			'description'          => '',
+			'description'          => $description,
 			'default_value'        => '',
 			'placeholder'          => '',
 			'options'              => json_encode($forms),
@@ -376,8 +395,6 @@ class CubeWp_Forms_Emails
 			'appearance'           => '',
 			'required'             => true,
 			'validation_msg'       => '',
-			'multiple'             => false,
-			'select2_ui'           => true,
 			'id'                   => 'forms_types',
 			'class'                => '',
 			'container_class'      => '',
@@ -388,22 +405,32 @@ class CubeWp_Forms_Emails
 	}
 
 	private static function cubewp_email_forms()
-	{
-		$cwp_forms_posts = get_posts(array(
-			'post_type' => 'cwp_forms',
-			'posts_per_page' => -1, // Retrieve all posts
-		));
+{
+    $cwp_forms_posts = get_posts( array(
+        'post_type'      => 'cwp_forms',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ) );
 
-		// Initialize an empty array to store posts with post ID as key and title as value
-		$cwp_forms = array();
-		if (!empty($cwp_forms_posts)) {
-			// Loop through each post
-			foreach ($cwp_forms_posts as $post) {
-				// Store post ID and title in the array
-				$cwp_forms['label'][$post->post_name] = $post->post_title;
-				$cwp_forms['value'][$post->post_name] = $post->ID;
-			}
-		}
-		return $cwp_forms;
-	}
+    // Always ensure both keys exist so json_encode() in the caller works consistently
+    $cwp_forms = array(
+        'label' => array(),
+        'value' => array(),
+    );
+
+    if ( ! empty( $cwp_forms_posts ) && is_array( $cwp_forms_posts ) ) {
+        foreach ( $cwp_forms_posts as $post ) {
+            $title = get_the_title( $post );           // properly get the title
+            $id    = (int) $post->ID;                  // use ID as the option value (safer)
+            // If you prefer slug: $value = sanitize_title( $post->post_name );
+
+            $cwp_forms['label'][] = esc_html( $title );
+            $cwp_forms['value'][] = $id;
+        }
+    }
+    return $cwp_forms;
+}
+
 }

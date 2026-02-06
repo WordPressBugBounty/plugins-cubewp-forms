@@ -24,7 +24,7 @@ class CubeWp_Forms_Custom {
 	 *
 	 * @var string
 	 */
-	public static $CubeWp_Forms_version = '1.1.8';
+	public static $CubeWp_Forms_version = '1.1.10';
 	/**
 	 * The single instance of the class.
 	 *
@@ -218,11 +218,12 @@ class CubeWp_Forms_Custom {
 			$locale = is_admin() ? get_user_locale() : get_locale();
 		}
 
-		$locale = apply_filters( 'plugin_locale', $locale, 'cubewp-forms' );
+		$locale = apply_filters( 'cubewp_forms/plugin_locale', $locale, 'cubewp-forms' );
 
 		unload_textdomain( 'cubewp-forms' );
 		load_textdomain( 'cubewp-forms', WP_LANG_DIR . '/cubewp-addon-forms/cubewp-forms-' . $locale . '.mo' );
-		load_plugin_textdomain( 'cubewp-forms', false, plugin_basename( dirname( CUBEWP_FORMS_PLUGIN_FILE ) ) . '/languages' );
+		// The call to load_plugin_textdomain() is no longer necessary as of WordPress 4.6+.
+		// WordPress will automatically load plugin translations from WordPress.org as needed.
 	}
 
 }

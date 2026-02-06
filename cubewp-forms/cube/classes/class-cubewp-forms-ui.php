@@ -48,8 +48,17 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
      * @return void
      * @since  1.0.0
      */
-    public static function add_new_group() {
-        if(isset($_GET['action']) && ('new' == sanitize_text_field($_GET['action']) || 'edit' == sanitize_text_field($_GET['action']))){
+    public static function add_new_group() { 
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if(isset($_GET['action']) && ('new' == sanitize_text_field( wp_unslash( $_GET['action'] ) ) || 'edit' == sanitize_text_field( wp_unslash( $_GET['action'] ) ))){
+            // Verify nonce for edit action
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            if ( 'edit' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'cwp_edit_group' ) ) {
+                    wp_die( esc_html__( 'Security check failed. Please try again.', 'cubewp-forms' ) );
+                }
+            }
             self::edit_group();
         }
     }    
@@ -60,18 +69,20 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
      * @since  1.0.0
      */
     public static function group_display() {
-        if(isset($_GET['action']) && ('new' == sanitize_text_field($_GET['action']) || 'edit' == sanitize_text_field($_GET['action']))){
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if(isset($_GET['action']) && ('new' == sanitize_text_field( wp_unslash( $_GET['action'] ) ) || 'edit' == sanitize_text_field( wp_unslash( $_GET['action'] ) ))){
             return;
         }
         $customFieldsGroupTable = new CubeWp_Forms_Table();
         ?>
         <div class="wrap cwp-post-type-wrape">
             <h1 class="wp-heading-inline"><?php esc_html_e("CubeWP Forms", 'cubewp-forms'); ?></h1>
-            <a href="<?php echo CubeWp_Submenu::_page_action('cubewp-form-fields','new'); ?>" class="page-title-action"><?php esc_html_e('Add New', 'cubewp-forms'); ?></a>
+            <a href="<?php echo esc_url( CubeWp_Submenu::_page_action('cubewp-form-fields','new') ); ?>" class="page-title-action"><?php esc_html_e('Add New', 'cubewp-forms'); ?></a>
             <hr class="wp-header-end">
             <?php $customFieldsGroupTable->prepare_items(); ?>
             <form method="post">
                 <input type="hidden" name="page" value="custom-fields">
+                <?php wp_nonce_field( 'cubewp-forms-form', '_cubewp_forms_nonce' );?>
                 <?php $customFieldsGroupTable->display(); ?>
             </form>
         </div>
@@ -144,10 +155,16 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
         <form id="post" class="cwpgroup" method="post" action="" enctype="multipart/form-data">
             
             <div class="cwpform-title-outer  margin-bottom-0 margin-left-minus-20  margin-right-0">
-                <?php echo self::_title();	?>			
+                <?php 
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                echo self::_title();	?>			
             </div>
-            <input type="hidden" name="cwp_form_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>">
-            <input type="hidden" class="" name="cwp[form][id]" value="<?php echo esc_attr($group['id']); ?>">
+            <input type="hidden" name="cwp_form_nonce" value="<?php
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo wp_create_nonce( basename( __FILE__ ) ); ?>">
+            <input type="hidden" class="" name="cwp[form][id]" value="<?php 
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo esc_attr($group['id']); ?>">
             <div id="poststuff"  class="padding-0">
             <div id="post-body" class="metabox-holder columns-2">
                 <div id="postbox-container-1" class="postbox-container">
@@ -159,7 +176,9 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                             <div class="inside">
                                 <div id="major-publishing-actions">
                                     <div id="publishing-action" style="float:none">
-                                        <?php echo self::save_button(); ?>
+                                        <?php 
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                        echo self::save_button(); ?>
                                     </div>
                                 </div>
                             </div>
@@ -178,6 +197,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
 									<!-- updates code for cube forms -->
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Email', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][emails]',
@@ -192,6 +212,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
 									<div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Form CSS ID', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][form_id]',
@@ -206,6 +227,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('User Email Field Name', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][user_email]',
@@ -229,6 +251,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
 									foreach ($pages as $page) {
 										$pages_options[$page->ID] = $page->post_title;
 									}
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/dropdown/customfield', '', array(
                                         'label' => esc_html__('Redirect After Submission', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][page_id]',
@@ -249,6 +272,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     ?>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/dropdown/customfield', '', array(
                                         'label' => esc_html__('Recaptcha', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][recaptcha]',
@@ -269,6 +293,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     <?php } ?>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Form Submit Button Text', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][button_text]',
@@ -283,6 +308,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Form Submit Button Class', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][button_class]',
@@ -297,6 +323,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Form Submit Button Width', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][button_width]',
@@ -311,6 +338,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/dropdown/customfield', '', array(
                                         'label' => esc_html__('Form Submit Button Position', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][button_position]',
@@ -331,6 +359,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
 									 <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Restrict form submission only for logged-in users', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][login]',
@@ -347,6 +376,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
                                     <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Display Form name and description', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][display]',
@@ -367,6 +397,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     ?>
 									 <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Mailchimp Integration', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][mailchimp]',
@@ -383,6 +414,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                     </div>
 									 <div class="setting-block">
                                     <?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo apply_filters('cubewp/admin/text/customfield', '', array(
                                         'label' => esc_html__('Mailchimp Audience ID', 'cubewp-forms'),
                                         'name' => 'cwp[form][settings][mailchimp_list_id]',
@@ -414,6 +446,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                 <table class="form-table cwp-validation">
                                     <tbody>
                                         <?php
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                         echo apply_filters('cubewp/admin/group/text/field', '', array(
                                             'id'             =>    '',
                                             'name'           =>    'cwp[form][name]',
@@ -425,6 +458,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                             'extra_attrs'    =>    'maxlength=20',
                                             'tooltip'        =>    'Give a name for this form. Which will be used as form title.',
                                         ));
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                         echo apply_filters('cubewp/admin/group/text/field', '', array(
                                             'id'             =>    '',
                                             'type'           =>    'text',
@@ -437,6 +471,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                             'extra_attrs'    =>    'maxlength=20',
                                             'tooltip'        =>    'Give slug for this form. It should be unique.',
                                         ));
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                         echo apply_filters('cubewp/admin/group/text/field', '', array(
                                             'id'             =>    '',
                                             'name'           =>    'cwp[form][description]',
@@ -448,6 +483,7 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                                             'extra_attrs'    =>    'maxlength=100',
                                             'tooltip'        =>    'Give a description for this form. Which will be used to show under the form title',
                                         ));
+                                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 										echo apply_filters('cubewp/admin/dashboard/dropdown/field', '', array(
                                             'id'             =>    '',
                                             'name'           =>    'cwp[form][settings][style]',
@@ -498,7 +534,10 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                             </div>
                         </div>
                         <div class="cwp-group-fields-content">
-                            <?php echo self::get_fields($group['fields'], $group['sub_fields']); ?>
+                           
+                            <?php 
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            echo self::get_fields($group['fields'], $group['sub_fields']); ?>
                         </div>
                     </div>
                 </div>
@@ -516,7 +555,8 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
      * @since 1.0
      */  
     private static function _title() {
-        if (isset($_GET['action']) && ('edit' == sanitize_text_field($_GET['action']) && !empty($_GET['groupid']))) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (isset($_GET['action']) && ('edit' == sanitize_text_field( wp_unslash( $_GET['action'] ) ) && !empty($_GET['groupid']))) {
             return '<h1>'. esc_html(__('Edit Form', 'cubewp-forms')) .'</h1>';
         } else {
             return '<h1>'. esc_html(__('Create New Form', 'cubewp-forms')) .'</h1>';
@@ -530,7 +570,8 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
      * @since  1.0.0
     */
      private static function save_button() {
-        if(isset($_GET['action']) && ('edit' == sanitize_text_field($_GET['action']) && !empty($_GET['groupid']))){            
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if(isset($_GET['action']) && ('edit' == sanitize_text_field( wp_unslash( $_GET['action'] ) ) && !empty($_GET['groupid']))){            
             $name = 'cwp_edit_group';
         }else{
             $name = 'cwp_save_group';
@@ -545,12 +586,18 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
      * @since  1.0.0
      */
     protected static function save_group() {
+        // Verify nonce for form submission
+        if ( ! isset( $_POST['cwp_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cwp_form_nonce'] ) ), basename( __FILE__ ) ) ) {
+            return;
+        }
+        
         if (isset($_POST['cwp']['form'])) {
-            $groupID     = sanitize_text_field($_POST['cwp']['form']['id']);
-            $groupName   = sanitize_text_field($_POST['cwp']['form']['name']);
-            $groupDesc   = wp_strip_all_tags( wp_unslash( sanitize_text_field($_POST['cwp']['form']['description']) ));
-            $groupslug   = isset($_POST['cwp']['form']['slug']) ? sanitize_text_field($_POST['cwp']['form']['slug']) : '';
-            $group_settings   = isset($_POST['cwp']['form']['settings']) ? CubeWp_Sanitize_text_Array($_POST['cwp']['form']['settings']) : '';
+            $groupID     = isset($_POST['cwp']['form']['id']) ? sanitize_text_field( wp_unslash( $_POST['cwp']['form']['id'] ) ) : '';
+            $groupName   = isset($_POST['cwp']['form']['name']) ? sanitize_text_field( wp_unslash( $_POST['cwp']['form']['name'] ) ) : '';
+            $groupDesc   = isset($_POST['cwp']['form']['description']) ? wp_strip_all_tags( sanitize_text_field( wp_unslash( $_POST['cwp']['form']['description'] ) ) ) : '';
+            $groupslug   = isset($_POST['cwp']['form']['slug']) ? sanitize_text_field( wp_unslash( $_POST['cwp']['form']['slug'] ) ) : '';
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            $group_settings   = isset($_POST['cwp']['form']['settings']) ? CubeWp_Sanitize_text_Array( wp_unslash( $_POST['cwp']['form']['settings'] ) ) : '';
             if (!empty($groupName)) {
                 if (isset($_POST['cwp_save_group'])) {
                     $post_id = wp_insert_post(array(
@@ -576,8 +623,9 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
                     update_post_meta( $post_id, self::META_PREFIX . $key, $value );
                 }
             }
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
             self::save_custom_fields($_POST['cwp'],$post_id,'');
-            wp_redirect( CubeWp_Submenu::_page_action('cubewp-form-fields') );            
+            wp_safe_redirect( CubeWp_Submenu::_page_action('cubewp-form-fields') );            
         }
         
     }

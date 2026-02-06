@@ -36,6 +36,7 @@ class CubeWp_Forms_Dashboard
 
         $data = [];
         $form_data = cwp_forms_all_leads_by_post_author(get_current_user_id());
+      
         if(isset($form_data) && !empty($form_data)){
             $form_data = array_reverse($form_data);
             foreach($form_data as $leads){
@@ -76,7 +77,7 @@ class CubeWp_Forms_Dashboard
 	 * @since  1.0.0
 	 */
     public static function lead_details($form_details) {
-        $output='';
+        $output=''; 
         if(!empty(self::cwp_lead_tabs_content($form_details))){
             if(count($form_details) > 1 ){
                 $output .= '<div class="cwp-dashboard-leads-head">';
@@ -197,6 +198,7 @@ class CubeWp_Forms_Dashboard
                     <div class="cwp-dashboard-lead-top">
                         <div class="cwp-dashboard-lead-post">
                             <?php if (!empty($post_id)) {
+                                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                 echo CubeWp_Frontend_User_Dashboard::get_post_details($post_id);
                             }
                             ?>
@@ -246,7 +248,9 @@ class CubeWp_Forms_Dashboard
     public function cwp_get_forms_data()
     {
 
-        if (!wp_verify_nonce(sanitize_text_field($_POST['security_nonce']), "cubewp_forms_dashboard")) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
+        if ( ! isset( $_POST['security_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['security_nonce'] ), "cubewp_forms_dashboard" ) ) {
             wp_send_json(
                 array(
                     'type' => 'error',
@@ -255,7 +259,13 @@ class CubeWp_Forms_Dashboard
             );
         }
         global $wpdb;
-        $leadid = sanitize_text_field($_POST['lead_id']);
+        
+        $leadid = '';
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
+        if ( isset( $_POST['lead_id'] ) ) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
+            $leadid = sanitize_text_field( $_POST['lead_id'] );
+        }
         $form_data = cwp_forms_all_leads_by_lead_id($leadid);
         $form_output = '';
         if (isset($form_data['fields']) && !empty($form_data['fields'])) {

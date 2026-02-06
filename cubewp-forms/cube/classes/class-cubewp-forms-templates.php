@@ -78,12 +78,12 @@ class CubeWp_Forms_Templates {
 													$description = trim($lines[1]);
 													?>
 													<div class="cwp-leads-templates-main-grids">
-														<span><?php echo ucwords(str_replace("-", " ", $entry ) ); ?></span>
+														<span><?php echo esc_html( ucwords( str_replace( "-", " ", $entry ) ) ); ?></span>
 														<h3><?php echo esc_attr( $template_name ); ?></h3>
 														<p><?php echo esc_attr( $description ); ?></p>
 														<div class="cwp-leads-templates-main-grids-buttons">
 															<a class="preview-link" href="https://cubewp.com/extensions/cubewp-forms-templates/?form_type=<?php echo esc_attr( $template); ?>" target="blank">Preview</a>
-															<button class="cwp-templates-grids-buttons-form" data-import="<?php echo CWP_FORMS_PLUGIN_DIR . 'cube/import/'.$entry.'/'.$template; ?>">Import Template</button>
+															<button class="cwp-templates-grids-buttons-form" data-import="<?php echo esc_attr( CWP_FORMS_PLUGIN_DIR . 'cube/import/'.$entry.'/'.$template ); ?>">Import Template</button>
 														</div>
 													</div>
 													<?php
@@ -113,7 +113,7 @@ class CubeWp_Forms_Templates {
 							</div>
 						</div>
 						<div class="cwp-welcome-box-logo">
-							<img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/cube-addons.png'; ?>" alt="" />
+							<img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/cube-addons.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />
 						</div>
 					</div>
 					<div class="cwp-welcome-box cwp-leads-template-addons">
@@ -122,10 +122,18 @@ class CubeWp_Forms_Templates {
 							<a href="https://cubewp.com/extensions/" target="_blank">See All</a>
 						</div>
 						<div class="cwp-leads-template-addons-cotent">
-							<a href="https://cubewp.com/downloads/cubewp-addon-social-logins/" class="cwp-lead-content-imges four" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Social-Login.png'; ?>" alt="image" />Social Login</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-wallet" class="cwp-lead-content-imges four" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Digital-Wallet.png'; ?>" alt="image" />Digital Wallet</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-post-claim" class="cwp-lead-content-imges four" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Post-Claim.png'; ?>" alt="image" />Post Claim</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-bulk-import/" class="cwp-lead-content-imges four" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Bulk-Import.png'; ?>" alt="image" />Bulk Import</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-social-logins/" class="cwp-lead-content-imges four" target="_blank">
+								<img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Social-Login.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Social Login
+							</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-wallet" class="cwp-lead-content-imges four" target="_blank">
+								<img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Digital-Wallet.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Digital Wallet
+							</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-post-claim" class="cwp-lead-content-imges four" target="_blank">
+								<img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Post-Claim.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Post Claim
+							</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-bulk-import/" class="cwp-lead-content-imges four" target="_blank">
+								<img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Bulk-Import.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Bulk Import
+							</a>
 						</div>
 					</div>
 					<div class="cwp-welcome-box cwp-leads-template-addons">
@@ -134,12 +142,12 @@ class CubeWp_Forms_Templates {
 							<a href="https://cubewp.com/extensions/" target="_blank">See All</a>
 						</div>
 						<div class="cwp-leads-template-addons-cotent">
-							<a href="https://cubewp.com/downloads/cubewp-addon-frontend-pro/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Frontend.png'; ?>" alt="image" />Frontend Pro</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-payments/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Payments.png'; ?>" alt="image" />Payments</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-inbox/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Inbox.png'; ?>" alt="image" />Inbox</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-reviews/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Reviews.png'; ?>" alt="image" />Reviews</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-booster/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Booster.png'; ?>" alt="image" />Booster</a>
-							<a href="https://cubewp.com/downloads/cubewp-addon-booking/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Booking.png'; ?>" alt="image" />Booking</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-frontend-pro/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Frontend.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Frontend Pro</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-payments/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Payments.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Payments</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-inbox/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Inbox.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Inbox</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-reviews/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Reviews.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" ?> " />Reviews</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-booster/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Booster.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Booster</a>
+							<a href="https://cubewp.com/downloads/cubewp-addon-booking/" class="cwp-lead-content-imges three" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/Booking.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Booking</a>
 						</div>
 					</div>
 					<div class="cwp-welcome-box cwp-leads-template-addons">
@@ -148,10 +156,10 @@ class CubeWp_Forms_Templates {
 							<a href="https://cubewp.com/themes/" target="_blank">See All</a>
 						</div>
 						<div class="cwp-leads-template-addons-cotent">
-							<a href="https://cubewp.com/downloads/dubified/" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/dubi.png'; ?>" alt="image" />Classified Ads Theme</a>
-							<a href="https://cubewp.com/downloads/streetwise/" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/street.png'; ?>" alt="image" />Real-Estate Theme</a>
-							<a href="https://cubewp.com/downloads/yellowbooks/" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/yellow.png'; ?>" alt="image" />Directory Theme</a>
-							<a href="https://themeforest.net/item/classifiedpro-recommerce-classified-wordpress-theme/44528010" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/classi.png'; ?>" alt="image" />Classified Ads Theme</a>
+							<a href="https://cubewp.com/downloads/dubified/" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/dubi.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Classified Ads Theme</a>
+							<a href="https://cubewp.com/downloads/streetwise/" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/street.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Real-Estate Theme</a>
+							<a href="https://cubewp.com/downloads/yellowbooks/" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/yellow.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Directory Theme</a>
+							<a href="https://themeforest.net/item/classifiedpro-recommerce-classified-wordpress-theme/44528010" class="cwp-lead-content-imges two" target="_blank"><img src="<?php echo esc_url( CWP_PLUGIN_URI . 'cube/assets/admin/images/welcome-dashboard/themes-extensions/classi.png' ); ?>" alt="<?php esc_attr_e( 'image', 'cubewp-forms' ); ?>" />Classified Ads Theme</a>
 						</div>
 					</div>
                     <div class="cwp-welcome-col-md-12 margin-bottom-10 ">

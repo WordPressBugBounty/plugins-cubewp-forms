@@ -76,7 +76,7 @@ class CubeWp_Forms_Rest_API extends WP_REST_Controller
 		$query_params  = parent::get_collection_params();
 
 		$query_params[self::CWP_QUERY] = array(
-			'description' => __('The Array with all data.', 'cubewp-framework'),
+			'description' => __('The Array with all data.', 'cubewp-forms'),
 			'type'        => '',
 		);
 		return $query_params;

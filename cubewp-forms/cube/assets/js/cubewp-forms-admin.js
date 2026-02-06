@@ -45,7 +45,8 @@
 				type: 'POST',
 				data: {
 					action: 'get_email_template_data',
-					selectedOptions: selectedOptions
+					selectedOptions: selectedOptions,
+					'nonce': cwp_vars_params.nonce
 				},
 				success: function(response) {
 					// Append the response data to the specified element

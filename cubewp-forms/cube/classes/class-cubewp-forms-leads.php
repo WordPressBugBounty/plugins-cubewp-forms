@@ -34,8 +34,13 @@ class CubeWp_Forms_Leads {
      * @since  1.0.0
      */
     public static function group_display() {
-        if(isset($_GET['action']) && 'edit' == sanitize_text_field( $_GET['action'] ) && isset($_GET['leadid'])){
-            return self::edit_group(sanitize_text_field($_GET['leadid']));
+        // Verify nonce for edit action 
+        if(isset($_GET['action']) && 'edit' == sanitize_text_field( wp_unslash( $_GET['action'] ) ) && isset($_GET['leadid'])){
+            // Verify nonce for security
+            if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'cwp_edit_group' ) ) {
+                wp_die( esc_html__( 'Security check failed. Please try again.', 'cubewp-forms' ) );
+            }
+            return self::edit_group(sanitize_text_field(wp_unslash($_GET['leadid'])));
         }
         $customFieldsGroupTable = new CubeWp_Forms_Data_Table();
         ?>
@@ -45,6 +50,7 @@ class CubeWp_Forms_Leads {
             <?php $customFieldsGroupTable->prepare_items(); ?>
             <form id="posts-filter" method="post">
                 <input type="hidden" name="page" value="cubewp-leads">
+                <?php wp_nonce_field( 'cubewp-leads-form', '_cubewp_leads_nonce' ); ?>
                 <?php $customFieldsGroupTable->display(); ?>
             </form>
         </div>
@@ -75,7 +81,9 @@ class CubeWp_Forms_Leads {
                             </div>
                             <div class="inside lead-detail-box">
                                 <div class="main">
-                                    <?php echo self::lead_details($leadID); ?>
+                                    <?php 
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                    echo self::lead_details($leadID); ?>
                                 </div>
                             </div>
                         </div>
@@ -86,8 +94,9 @@ class CubeWp_Forms_Leads {
                                 <div class="postbox-header">
                                     <h2 class="hndle"><?php esc_html_e('Information', 'cubewp-forms'); ?></h2>
                                 </div>
-                                <div class="inside lead-detail-box">
-                                    <?php echo self::cwp_lead_information($leadID); ?>
+                                <div class="inside lead-detail-box"> 
+                                    <?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                    echo self::cwp_lead_information($leadID); ?>
                                 </div>
                             </div>
                             <div class="postbox">
@@ -95,8 +104,10 @@ class CubeWp_Forms_Leads {
                                     <h2 class="hndle"><?php esc_html_e('How to manage leads from frontend?', 'cubewp-forms'); ?></h2>
                                 </div>
                                 <div class="cwp-manage-leads">
-                                    <img src="<?php echo CWP_FORMS_PLUGIN_URL . 'cube/assets/images/cwp-dashboard-leads.png'; ?>" alt="" />
-                                    <h5><?php esc_html_e('Try CubeWP Frontend Pro to unlock powerful front-end features.'); ?></h5>
+                                    <img src="<?php  echo esc_url(CWP_FORMS_PLUGIN_URL . 'cube/assets/images/cwp-dashboard-leads.png'); ?>" alt="image" />  
+                                    <h5><?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                    // translators: 1: Opening anchor tag, 2: Closing anchor tag.
+                                    echo sprintf(esc_html__('Try %s to unlock powerful front-end features.', 'cubewp-forms'), '<a href="https://cubewp.com/cubewp-frontend-pro/" target="_blank">CubeWP Frontend Pro</a>'); ?></h5>
                                     <div class="cwp-leads-frontend-pro">
                                         <span class="dashicons dashicons-yes"></span>
                                         <p><?php esc_html_e('Frontend User Dashboard Builder', 'cubewp-forms'); ?></p>
@@ -260,8 +271,8 @@ class CubeWp_Forms_Leads {
         $date_id = cwp_lead_date_by_lead_id($leadID);
         $form_name  = isset($form_id) ? get_the_title($form_id) : '';
         $user = !empty($user_id) ? get_userdata($user_id)->user_login : '';
-        $lead_date = isset($date_id) ? date("m/d/Y",$date_id) : '';
-        $lead_time = isset($date_id) ? date("h:i:s A T",$date_id) : '';
+        $lead_date = isset($date_id) ? gmdate("m/d/Y",$date_id) : '';
+        $lead_time = isset($date_id) ? gmdate("h:i:s A T",$date_id) : '';
         ob_start();
         ?>
         <div class="cwp-lead-form-details">

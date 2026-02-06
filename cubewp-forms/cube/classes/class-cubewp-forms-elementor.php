@@ -76,14 +76,14 @@ class CubeWp_Forms_Elementor
         }
         // Check for required Elementor version
         if (! version_compare(ELEMENTOR_VERSION, self::MINIMUM_ELEMENTOR_VERSION, '>=')) {
-            $message = sprintf(/* translators: 1: Plugin name 2: Elementor 3: Required Elementor version */esc_html__('"%1$s" requires "%2$s" version %3$s or greater.', 'cubewp-Forms'), '<strong>' . esc_html__('CubeWP', 'cubewp-Forms') . '</strong>', '<strong>' . esc_html__('Elementor', 'cubewp-Forms') . '</strong>', self::MINIMUM_ELEMENTOR_VERSION);
+            $message = sprintf(/* translators: 1: Plugin name 2: Elementor 3: Required Elementor version */esc_html__('"%1$s" requires "%2$s" version %3$s or greater.', 'cubewp-forms'), '<strong>' . esc_html__('CubeWP', 'cubewp-forms') . '</strong>', '<strong>' . esc_html__('Elementor', 'cubewp-forms') . '</strong>', self::MINIMUM_ELEMENTOR_VERSION);
             new CubeWp_Admin_Notice("elementor-version", $message, 'warning');
 
             return false;
         }
         // Check for required PHP version
         if (version_compare(PHP_VERSION, self::MINIMUM_PHP_VERSION, '<')) {
-            $message = sprintf(/* translators: 1: Plugin name 2: PHP 3: Required PHP version */esc_html__('"%1$s" requires "%2$s" version %3$s or greater.', 'cubewp-Forms'), '<strong>' . esc_html__('CubeWP', 'cubewp-Forms') . '</strong>', '<strong>' . esc_html__('PHP', 'cubewp-Forms') . '</strong>', self::MINIMUM_PHP_VERSION);
+            $message = sprintf(/* translators: 1: Plugin name 2: PHP 3: Required PHP version */esc_html__('"%1$s" requires "%2$s" version %3$s or greater.', 'cubewp-forms'), '<strong>' . esc_html__('CubeWP', 'cubewp-forms') . '</strong>', '<strong>' . esc_html__('PHP', 'cubewp-forms') . '</strong>', self::MINIMUM_PHP_VERSION);
             new CubeWp_Admin_Notice("elementor-php-version", $message, 'warning');
 
             return false;
@@ -125,8 +125,9 @@ class CubeWp_Forms_Elementor
                     // Register the widget instance
                     $widgets_manager->register(new $class());
                 } else {
-                    // If the class doesn't exist, stop execution with an error
-                    wp_die(sprintf(esc_html__("%s Class Doesn't Exist.", "cubewp-Forms"), $class));
+                    // If the class doesn't exist, stop execution with an error 
+                    // translators: 1: Opening strong tag, 2: Class name, 3: Closing strong tag.
+                    wp_die(sprintf(esc_html__("%1\$s%2\$s%3\$s Class Doesn't Exist.", "cubewp-forms"), "<strong>", esc_html($class), "</strong>"));
                 }
             }
         }

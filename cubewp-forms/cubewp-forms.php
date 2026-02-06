@@ -3,9 +3,11 @@
  * Plugin Name: CubeWP Forms
  * Plugin URI: https://cubewp.com/
  * Description: LeadGen & Contact Form by CubeWP – Drag & Drop Form Builder for WordPress
- * Version: 1.1.8
+ * Version: 1.1.10
  * Author: CubeWP
  * Author URI: https://CubeWp.com
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: cubewp-forms
  * Domain Path: /languages/
  * @package cubewp-forms
@@ -16,26 +18,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /* CUBEWP_FRONTEND_PLUGIN_DIR Defines for load Php files */
 if (!defined('CWP_FORMS_PLUGIN_DIR')) {
-    define('CWP_FORMS_PLUGIN_DIR', plugin_dir_path(__FILE__));
+    define('CWP_FORMS_PLUGIN_DIR', plugin_dir_path(__FILE__)); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 }
 
 /* CUBEWP_FRONTEND_PLUGIN_URL Defines for load JS and CSS files */
 if (!defined('CWP_FORMS_PLUGIN_URL')) {
-    define('CWP_FORMS_PLUGIN_URL', plugins_url( '/', __FILE__ ));
+    define('CWP_FORMS_PLUGIN_URL', plugins_url( '/', __FILE__ )); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 }
 
 /* CUBEWP_FRONTEND_PLUGIN_FILE Defines for file access */
 if (!defined('CUBEWP_FORMS_PLUGIN_FILE')) {
     define('CUBEWP_FORMS_PLUGIN_FILE', __FILE__);
 }
-spl_autoload_register('CWP_FORMS_autoload_classes');
+spl_autoload_register('cubewp_forms_autoload_classes');
 
 /**
  * All CubeWP classes files to be loaded automatically.
  *
  * @param string $className Class name.
  */
-function CWP_FORMS_autoload_classes($className) {
+function cubewp_forms_autoload_classes($className) {
     
     // If class does not start with our prefix (CubeWp), nothing will return.
     if (false === strpos($className, 'CubeWp_Forms')) {
@@ -72,16 +74,29 @@ add_action( 'cubewp_loaded', 'cubewp_custom_forms_init');
  * @return void
  * @since  1.0.0
  */
-if ( ! function_exists('cubewp_framework_required_notice_for_forms')) {
-    function cubewp_framework_required_notice_for_forms() {
-        if ( ! function_exists( 'CWP' ) ) {
-        ?>
-            <div class="notice notice-error">
-                <p><strong><?php esc_html_e( 'CubeWP Forms', 'cubewp-forms' ); ?></strong></p>
-                <p><?php echo sprintf( esc_html__( '%sCubeWP Framework%s is required to run CubeWP Forms.', 'cubewp-forms' ), '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin=cubewp-framework&TB_iframe=true' ) . '" class="thickbox open-plugin-details-modal">', '</a>' ); ?></p>
-            </div>
-            <?php
-        }
-    }
-    add_action( 'admin_notices', 'cubewp_framework_required_notice_for_forms' );
+if ( ! function_exists( 'cubewp_framework_required_notice_for_forms' ) ) {
+	function cubewp_framework_required_notice_for_forms() {
+		if ( ! function_exists( 'CWP' ) ) {
+			?>
+			<div class="notice notice-error">
+				<p><strong><?php esc_html_e( 'CubeWP Forms', 'cubewp-forms' ); ?></strong></p>
+
+				<p>
+					<?php
+					echo sprintf(
+						/* translators: %s: CubeWP Framework plugin link */
+						esc_html__( '%s is required to run CubeWP Forms.', 'cubewp-forms' ),
+						'<a href="' . esc_url(
+							admin_url( 'plugin-install.php?tab=plugin-information&plugin=cubewp-framework&TB_iframe=true' )
+						) . '" class="thickbox open-plugin-details-modal">' .
+						esc_html__( 'CubeWP Framework', 'cubewp-forms' ) .
+						'</a>'
+					);
+					?>
+				</p>
+			</div>
+			<?php
+		}
+	}
+	add_action( 'admin_notices', 'cubewp_framework_required_notice_for_forms' );
 }

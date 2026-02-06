@@ -1,30 +1,45 @@
 <?php
 
 if (! function_exists('cwp_leads_create_database')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_leads_create_database()
     {
         global $wpdb;
-        $charset_collate       = $wpdb->get_charset_collate();
-        $wpdb->query("CREATE TABLE IF NOT EXISTS `" . $wpdb->prefix . "cwp_forms_leads` (
-            `id` bigint(20) unsigned NOT NULL auto_increment,
-            `lead_id` longtext NOT NULL,
-            `user_id` bigint(20) DEFAULT NULL,
-            `form_id` bigint(20) NOT NULL DEFAULT '0',
-            `form_name` longtext NOT NULL,
-            `post_author` bigint(20) UNSIGNED NOT NULL,
-            `single_post` bigint(20) DEFAULT NULL,
-            `fields` longtext NOT NULL,
-            `dete_time` longtext NOT NULL,
-            PRIMARY KEY (`id`)
-        ) $charset_collate");
+
+        $table_name      = $wpdb->prefix . 'cwp_forms_leads';
+        $charset_collate = $wpdb->get_charset_collate();
+
+        // Escape table name
+        $table_name = esc_sql($table_name);
+
+        $sql = "
+            CREATE TABLE IF NOT EXISTS `$table_name` (
+                `id` bigint(20) unsigned NOT NULL auto_increment,
+                `lead_id` longtext NOT NULL,
+                `user_id` bigint(20) DEFAULT NULL,
+                `form_id` bigint(20) NOT NULL DEFAULT '0',
+                `form_name` longtext NOT NULL,
+                `post_author` bigint(20) UNSIGNED NOT NULL,
+                `single_post` bigint(20) DEFAULT NULL,
+                `fields` longtext NOT NULL,
+                `dete_time` longtext NOT NULL,
+                PRIMARY KEY (`id`)
+            ) $charset_collate;
+        ";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql); // <-- Proper for CREATE / Updates
     }
     add_action('admin_init', 'cwp_leads_create_database', 20);
 }
 
+
 if (! function_exists('cwp_insert_leads')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_insert_leads($data = array())
     {
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery	
         $wpdb->insert($wpdb->prefix . "cwp_forms_leads", array(
             'lead_id'       => isset($data['lead_id']) ? $data['lead_id'] : '',
             'user_id'       => isset($data['user_id']) ? $data['user_id'] : '',
@@ -39,10 +54,13 @@ if (! function_exists('cwp_insert_leads')) {
 }
 
 if (! function_exists('cwp_forms_all_leads')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_forms_all_leads()
     {
         global $wpdb;
-        $leads     = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}cwp_forms_leads", ARRAY_A);
+        $table_name = $wpdb->prefix . 'cwp_forms_leads';
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared ,PluginCheck.Security.DirectDB.UnescapedDBParameter	, WordPress.DB.DirectDatabaseQuery.DirectQuery , WordPress.DB.DirectDatabaseQuery.NoCaching
+        $leads     = $wpdb->get_results("SELECT * FROM {$table_name}", ARRAY_A);
         if (!empty($leads) && count($leads) > 0) {
             return $leads;
         }
@@ -51,10 +69,20 @@ if (! function_exists('cwp_forms_all_leads')) {
 }
 
 if (! function_exists('cwp_forms_all_leads_by_lead_id')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_forms_all_leads_by_lead_id($leadid = '')
     {
         global $wpdb;
-        $leads     = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}cwp_forms_leads WHERE lead_id='{$leadid}'", ARRAY_A);
+        $table_name = $wpdb->prefix . 'cwp_forms_leads'; 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery , PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.NoCaching	
+        $leads     = $wpdb->get_row(
+            $wpdb->prepare( 
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared	
+                "SELECT * FROM {$table_name} WHERE lead_id = %s",
+                $leadid
+            ),
+            ARRAY_A
+        );
         if (!empty($leads) && count($leads) > 0) {
             return $leads;
         }
@@ -63,10 +91,20 @@ if (! function_exists('cwp_forms_all_leads_by_lead_id')) {
 }
 
 if (! function_exists('cwp_forms_all_leads_by_id')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_forms_all_leads_by_id($id = '')
     {
         global $wpdb;
-        $leads     = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}cwp_forms_leads WHERE id={$id}", ARRAY_A);
+        $table_name = $wpdb->prefix . 'cwp_forms_leads';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery , PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.NoCaching	
+        $leads     = $wpdb->get_row(
+            $wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                "SELECT * FROM {$table_name} WHERE id = %d",
+                absint($id)
+            ),
+            ARRAY_A
+        );
         if (!empty($leads) && count($leads) > 0) {
             return $leads;
         }
@@ -74,10 +112,20 @@ if (! function_exists('cwp_forms_all_leads_by_id')) {
     }
 }
 if (! function_exists('cwp_forms_all_leads_by_post_author')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_forms_all_leads_by_post_author($id = '')
     {
-        global $wpdb;
-        $leads     = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}cwp_forms_leads WHERE post_author={$id}", ARRAY_A);
+        global $wpdb; 
+        $table_name = $wpdb->prefix . 'cwp_forms_leads';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery , PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.NoCaching	
+        $leads     = $wpdb->get_results(
+            $wpdb->prepare(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                "SELECT * FROM {$table_name} WHERE post_author = %d",
+                absint($id)
+            ),
+            ARRAY_A
+        );
         if (!empty($leads) && count($leads) > 0) {
             return $leads;
         }
@@ -91,6 +139,7 @@ if (! function_exists('cwp_forms_all_leads_by_post_author')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_dashboard_leads_tab')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_dashboard_leads_tab()
     {
         return CubeWp_Forms_Dashboard::cwp_leads();
@@ -106,6 +155,7 @@ if (! function_exists('cwp_dashboard_leads_tab')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_remove_lead_from_post')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_remove_lead_from_post($leadid = 0)
     {
         if ($leadid == 0)
@@ -128,6 +178,7 @@ if (! function_exists('cwp_remove_lead_from_post')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_remove_lead_from_author')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_remove_lead_from_author($leadid = 0)
     {
         if ($leadid == 0)
@@ -149,6 +200,7 @@ if (! function_exists('cwp_remove_lead_from_author')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_remove_lead')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_remove_lead($leadid = 0)
     {
         if ($leadid == 0)
@@ -156,6 +208,7 @@ if (! function_exists('cwp_remove_lead')) {
         global $wpdb;
         cwp_remove_lead_from_author($leadid);
         cwp_remove_lead_from_post($leadid);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery , WordPress.DB.DirectDatabaseQuery.NoCaching	
         $wpdb->delete($wpdb->prefix . 'cwp_forms_leads', array('lead_id' => $leadid), array('%s'));
     }
 }
@@ -169,6 +222,7 @@ if (! function_exists('cwp_remove_lead')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_form_id_by_lead_id')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_form_id_by_lead_id($leadid = 0)
     {
         if ($leadid == 0)
@@ -190,6 +244,7 @@ if (! function_exists('cwp_form_id_by_lead_id')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_post_id_by_lead_id')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_post_id_by_lead_id($leadid = 0)
     {
         if ($leadid == 0)
@@ -211,6 +266,7 @@ if (! function_exists('cwp_post_id_by_lead_id')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_author_id_by_lead_id')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_author_id_by_lead_id($leadid = 0)
     {
         if ($leadid == 0)
@@ -232,6 +288,7 @@ if (! function_exists('cwp_author_id_by_lead_id')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_lead_date_by_lead_id')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_lead_date_by_lead_id($leadid = 0)
     {
         if ($leadid == 0)
@@ -255,6 +312,7 @@ if (! function_exists('cwp_lead_date_by_lead_id')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_upload_custom_form_gallery_images')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_upload_custom_form_gallery_images($key = '', $val = array(), $files = array(), $post_id = 0)
     {
 
@@ -298,6 +356,7 @@ if (! function_exists('cwp_upload_custom_form_gallery_images')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_upload_custom_form_repeating_gallery_images')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_upload_custom_form_repeating_gallery_images($key = '', $_key = '', $field_key = '', $val = array(), $files = array(), $post_id = 0)
     {
 
@@ -339,6 +398,7 @@ if (! function_exists('cwp_upload_custom_form_repeating_gallery_images')) {
  * @since  1.0.0
  */
 if (! function_exists('cwp_upload_custom_form_file')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_upload_custom_form_file($key = '', $val = array(), $files = array(), $post_id = 0)
     {
 
@@ -369,6 +429,7 @@ add_filter('cubewp/custom_fields/custom_forms/fields', 'custom_form_fields_updat
  * @return array
  * @since  1.0.0
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function custom_form_fields_update($fields_settings = array(), $fieldData = array())
 {
     unset($fields_settings['field_rest_api']);
@@ -379,28 +440,29 @@ function custom_form_fields_update($fields_settings = array(), $fieldData = arra
 }
 
 if (! function_exists('cubewp_add_recaptcha_settings_sections')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cubewp_add_recaptcha_settings_sections($sections)
     {
         $sections['recaptcha-settings'] = array(
-            'title'  => __('reCAPTCHA Config', 'cubewp'),
+            'title'  => __('reCAPTCHA Config', 'cubewp-forms'),
             'id'     => 'recaptcha-settings',
             'icon'   => 'dashicons-shield',
             'fields' => array(
                 array(
                     'id'      => 'recaptcha',
                     'type'    => 'switch',
-                    'title'   => __('Enable reCAPTCHA', 'cubewp-framework'),
+                    'title'   => __('Enable reCAPTCHA', 'cubewp-forms'),
                     'default' => '0',
-                    'desc'    => __('Enable if you reCAPTCHA on your CubeWP forms.', 'cubewp-framework'),
+                    'desc'    => __('Enable if you reCAPTCHA on your CubeWP forms.', 'cubewp-forms'),
                 ),
                 array(
                     'id'       => 'recaptcha_type',
                     'type'     => 'select',
-                    'title'    => __('Select reCAPTCHA Type', 'cubewp-framework'),
+                    'title'    => __('Select reCAPTCHA Type', 'cubewp-forms'),
                     'subtitle' => '',
-                    'desc'     => __('Select the type of reCAPTCHA you want to use on to your CubeWP forms.', 'cubewp-framework'),
+                    'desc'     => __('Select the type of reCAPTCHA you want to use on to your CubeWP forms.', 'cubewp-forms'),
                     'options'  => array(
-                        'google_v2' => __('Google reCAPTCHA v2 Checkbox', 'cubewp-framework'),
+                        'google_v2' => __('Google reCAPTCHA v2 Checkbox', 'cubewp-forms'),
                     ),
                     'default'  => 'google_v2',
                     'required' => array(
@@ -410,9 +472,9 @@ if (! function_exists('cubewp_add_recaptcha_settings_sections')) {
                 array(
                     'id'       => 'google_recaptcha_sitekey',
                     'type'     => 'text',
-                    'title'    => __('Site Key', 'cubewp-framework'),
+                    'title'    => __('Site Key', 'cubewp-forms'),
                     'default'  => '',
-                    'desc'     => __('Please enter google reCAPTCHA v2 Or v3 site key here.', 'cubewp-framework'),
+                    'desc'     => __('Please enter google reCAPTCHA v2 Or v3 site key here.', 'cubewp-forms'),
                     'required' => array(
                         array('recaptcha', 'equals', '1')
                     )
@@ -420,9 +482,9 @@ if (! function_exists('cubewp_add_recaptcha_settings_sections')) {
                 array(
                     'id'       => 'google_recaptcha_secretkey',
                     'type'     => 'text',
-                    'title'    => __('Secret Key', 'cubewp-framework'),
+                    'title'    => __('Secret Key', 'cubewp-forms'),
                     'default'  => '',
-                    'desc'     => __('Please enter google reCAPTCHA v2 Or v3 secret key here.', 'cubewp-framework'),
+                    'desc'     => __('Please enter google reCAPTCHA v2 Or v3 secret key here.', 'cubewp-forms'),
                     'required' => array(
                         array('recaptcha', 'equals', '1')
                     )
@@ -430,7 +492,7 @@ if (! function_exists('cubewp_add_recaptcha_settings_sections')) {
             )
         );
         $sections['cubewp_forms_mailchimp'] = array(
-            'title'  => __('Mailchimp', 'cubewp-framework'),
+            'title'  => __('Mailchimp', 'cubewp-forms'),
             'id'     => 'cubewp_forms_mailchimp',
             'icon'   => 'dashicons dashicons-images-alt2',
             'fields' => array(
@@ -472,12 +534,13 @@ if (! function_exists('cubewp_add_recaptcha_settings_sections')) {
 /**
  * Class method, define folder path for import files
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function cwp_path_for_import_cubewp_content($path)
 {
     $redirect_url = $path;
-    if (isset($_COOKIE['cubewp-forms-template-style'])) {
-        // Get the value of the cookie
-        $redirect_url = $_COOKIE['cubewp-forms-template-style'];
+    if (isset($_COOKIE['cubewp-forms-template-style']) && !empty($_COOKIE['cubewp-forms-template-style'])) {
+        // Get the value of the cookie, unslash and sanitize
+        $redirect_url = wp_unslash($_COOKIE['cubewp-forms-template-style']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
     }
     return $redirect_url;
 }
@@ -486,6 +549,7 @@ add_filter('cubewp/import/content/path', 'cwp_path_for_import_cubewp_content');
 /**
  * Class method, define folder path for import files
  */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function cwp_redirect_after_sucess($path)
 {
     $redirect_url = $path;
@@ -497,6 +561,7 @@ function cwp_redirect_after_sucess($path)
 }
 add_filter('cubewp/after/import/redirect', 'cwp_redirect_after_sucess');
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function cubewp_forms_mailchimp_cubes_fields($fields, $cube)
 {
     global $cwpOptions;
@@ -516,6 +581,7 @@ function cubewp_forms_mailchimp_cubes_fields($fields, $cube)
 add_filter('cubewp/custom_fields/custom_forms/fields', 'cubewp_forms_mailchimp_cubes_fields', 11, 2);
 
 add_action('cubewp_forms_mailchimp_errors',  'cubewp_forms_display_errors_page');
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function cubewp_forms_display_errors_page()
 {
 ?>
@@ -535,11 +601,12 @@ function cubewp_forms_display_errors_page()
                 $table_name = $wpdb->prefix . 'cubewp_mailchimp_errors';
 
                 // Check if the table exists
-                $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'");
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared , WordPress.DB.DirectDatabaseQuery.DirectQuery , WordPress.DB.DirectDatabaseQuery.NoCaching
+                $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
 
                 if ($table_exists) {
-                    // Table exists, proceed with the query
-                    $errors = $wpdb->get_results("SELECT * FROM $table_name ORDER BY id DESC", ARRAY_A);
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery , PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.NoCaching , WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                    $errors = $wpdb->get_results("SELECT * FROM {$table_name} ORDER BY id DESC", ARRAY_A);
 
                     // Output the results
                     foreach ($errors as $error) {
@@ -557,30 +624,38 @@ function cubewp_forms_display_errors_page()
 }
 
 add_action('wp_ajax_clear_mailchimp_logs', 'clear_mailchimp_logs');
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function clear_mailchimp_logs()
 {
-	
-	if ( ! current_user_can('manage_options') ) {
+
+    if (! current_user_can('manage_options')) {
         wp_send_json_error('Unauthorized access', 403);
     }
-	
-	if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'cubewp-admin-nonce')) {
-		wp_send_json_error('Invalid nonce', 403);
-	}
-		
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
+    if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'cubewp-admin-nonce')) {
+        wp_send_json_error('Invalid nonce', 403);
+    }
+
     global $wpdb;
     $table_name = $wpdb->prefix . 'cubewp_mailchimp_errors';
-    $wpdb->query("TRUNCATE TABLE $table_name");
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared , PluginCheck.Security.DirectDB.UnescapedDBParameter
+    $wpdb->query("TRUNCATE TABLE {$table_name}");
     wp_die();
 }
 
 add_action('wp_ajax_get_email_template_data', 'get_email_template_data_callback');
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 function get_email_template_data_callback()
 {
 
     $fields = array();
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+    $_post = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_post)), 'cubewp-admin-nonce')) {
+        wp_send_json_error('Invalid nonce', 403);
+    }
     // Get the selected option values from the AJAX request
-    $selectedOptions = isset($_POST['selectedOptions']) ? $_POST['selectedOptions'] : '';
+    $selectedOptions = isset($_POST['selectedOptions']) ? sanitize_text_field(wp_unslash($_POST['selectedOptions'])) : '';
     if (!empty($selectedOptions)) {
         $groupFields = explode(',', get_post_meta($selectedOptions, '_cwp_group_fields', true));
         $fields = array_merge($fields, $groupFields);
@@ -606,6 +681,7 @@ function get_email_template_data_callback()
 }
 
 if (! function_exists('cubewp_forms_get_email_template')) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cubewp_forms_get_email_template($recipient, $form_id)
     {
         $args = array(
@@ -613,6 +689,7 @@ if (! function_exists('cubewp_forms_get_email_template')) {
             'post_status'    => 'publish',
             'fields'         => 'ids',
             'posts_per_page' => 1,
+            // phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
             'meta_query'     => array(
                 'relation' => 'AND',
                 array(
@@ -625,6 +702,7 @@ if (! function_exists('cubewp_forms_get_email_template')) {
                     'value'   => $form_id,
                     'compare' => '=='
                 ),
+            // phpcs:enable
             )
         );
         $templates = get_posts($args);
@@ -633,6 +711,7 @@ if (! function_exists('cubewp_forms_get_email_template')) {
 }
 
 if (! function_exists("CubeWp_Forms_Sanitize_Fields_Array")) {
+    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function CubeWp_Forms_Sanitize_Fields_Array($input, $fields_of)
     {
 

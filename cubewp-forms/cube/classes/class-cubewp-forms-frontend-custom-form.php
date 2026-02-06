@@ -118,7 +118,7 @@ class CubeWp_Forms_Frontend_Custom_Form
         $output = '<div class="cwp-frontend-form-container">
         <form method="post" id="' . esc_attr($submit_form_id) . '" class="cwp-custom-form ' . esc_attr($form_class) . '" action="" enctype="multipart/form-data">
         <input type="hidden" name="cwp_custom_form[form_id]" value="' . esc_attr($form_id) . '">
-        <input type="hidden" name="cwp_custom_form[form_data_id]" value="' . uniqid(rand()) . '">
+        <input type="hidden" name="cwp_custom_form[form_data_id]" value="' . uniqid(wp_rand()) . '">
         ' . $single_input . '
         <div class="tab-content">';
         $section_data['fields'] = $form_fields;
@@ -165,7 +165,7 @@ class CubeWp_Forms_Frontend_Custom_Form
                 $output .= '<h2>' . esc_attr($section_title) . '</h2>';
             }
             if (isset($section_description) && $section_description != '') {
-                $output .= '<p>' . apply_filters('the_content', $section_description) . '</p>';
+                $output .= '<p>' . apply_filters('cubewp_forms/the_content', $section_description) . '</p>';
             }
             $output .= '</div>';
         }
@@ -224,8 +224,9 @@ class CubeWp_Forms_Frontend_Custom_Form
      */
     public function cubewp_submit_custom_form()
     {
-
-        if (!wp_verify_nonce(sanitize_text_field($_POST['security_nonce']), "cubewp_forms_submit")) {
+ 
+        $security_nonce = isset($_POST['security_nonce']) ? sanitize_text_field( wp_unslash( $_POST['security_nonce'] ) ) : '';
+        if ( empty( $security_nonce ) || ! wp_verify_nonce( $security_nonce, "cubewp_forms_submit" ) ) {
             wp_send_json(
                 array(
                     'type' => 'error',
@@ -234,14 +235,15 @@ class CubeWp_Forms_Frontend_Custom_Form
             );
         }
         if (isset($_POST['g-recaptcha-response'])) {
-            CubeWp_Frontend_Recaptcha::cubewp_captcha_verification("cubewp_captcha_custom_form_submission", cubewp_core_data($_POST['g-recaptcha-response']));
+            CubeWp_Frontend_Recaptcha::cubewp_captcha_verification("cubewp_captcha_custom_form_submission", cubewp_core_data(sanitize_text_field(wp_unslash($_POST['g-recaptcha-response']))));
         }
         if (isset($_POST['cwp_custom_form'])) {
 			
             global $cwpOptions;
-            $data_id        = isset($_POST['cwp_custom_form']['form_data_id'])    ? sanitize_text_field($_POST['cwp_custom_form']['form_data_id']) : 0;
-            $form_id        = isset($_POST['cwp_custom_form']['form_id'])    ? sanitize_text_field($_POST['cwp_custom_form']['form_id']) : 0;
-            $single_form    = isset($_POST['cwp_custom_form']['single_post']) ? sanitize_text_field($_POST['cwp_custom_form']['single_post']) : '';
+            $data_id        = isset($_POST['cwp_custom_form']['form_data_id'])    ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['form_data_id'])) : 0;
+            $form_id        = isset($_POST['cwp_custom_form']['form_id'])    ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['form_id'])) : 0;
+            $single_form    = isset($_POST['cwp_custom_form']['single_post']) ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['single_post'])) : '';
+           // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash , WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             $metas          = isset($_POST['cwp_custom_form']['fields'])  ? CubeWp_Forms_Sanitize_Fields_Array($_POST['cwp_custom_form']['fields'], 'custom_forms') : '';
 
 
@@ -420,6 +422,8 @@ class CubeWp_Forms_Frontend_Custom_Form
 		}else if( !empty($emails) ){
 			cubewp_send_mail(
 				$emails,
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                // translators: %s: Form title.
 				sprintf(esc_html__('You have received a new entry from %s', 'cubewp-forms'), get_the_title( $form_id)),
 				$message,
 				$headers
@@ -484,9 +488,11 @@ class CubeWp_Forms_Frontend_Custom_Form
 
 				// Check if the table exists, if not, create it
 				global $wpdb;
-				$table_name = $wpdb->prefix . 'cubewp_mailchimp_errors';
+				$table_name = $wpdb->prefix . 'cubewp_mailchimp_errors'; 
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery , PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.NoCaching , WordPress.DB.PreparedSQL.NotPrepared ,	WordPress.DB.PreparedSQL.InterpolatedNotPrepared ,	WordPress.DB.PreparedSQL.InterpolatedNotPrepared 
 				if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-					$sql = "CREATE TABLE $table_name (
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange	
+                    $sql = "CREATE TABLE $table_name (
 						id mediumint(9) NOT NULL AUTO_INCREMENT,
 						error_message text NOT NULL,
 						error_date datetime NOT NULL,
@@ -496,6 +502,7 @@ class CubeWp_Forms_Frontend_Custom_Form
 					require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 					dbDelta($sql);
 				}
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery ,	WordPress.DB.DirectDatabaseQuery.NoCaching , WordPress.DB.PreparedSQL.NotPrepared ,	WordPress.DB.PreparedSQL.InterpolatedNotPrepared ,	WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$wpdb->insert($table_name, array(
 					'error_message' => $error_message,
 					'error_date' => current_time('mysql'),

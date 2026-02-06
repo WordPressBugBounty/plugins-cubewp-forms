@@ -63,16 +63,31 @@ class CubeWp_Forms_Table extends WP_List_Table{
         return $columns;
     }
     
-    public function usort_reorder( $a, $b ) {
-      // If no sort, default to title
-      $orderby = ( ! empty( $_GET['orderby'] ) ) ? sanitize_text_field($_GET['orderby']) : 'form_name';
-      // If no order, default to asc
-      $order = ( ! empty($_GET['order'] ) ) ? sanitize_text_field($_GET['order']) : 'asc';
-      // Determine sort order
-      $result = strcmp( $a[$orderby], $b[$orderby] );
-      // Send final sort direction to usort
-      return ( $order === 'asc' ) ? $result : -$result;
-    }
+    public function usort_reorder( $a, $b ) { 
+        // Verify nonce for security
+        $nonce_verified = false;
+       
+        if ( isset( $_GET['_wpnonce'] ) ) {
+            $nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
+            $nonce_verified = wp_verify_nonce( $nonce, 'cwp_sort_forms' );
+        }
+        
+        // Only use GET parameters if nonce is verified, otherwise use defaults
+        if ( $nonce_verified && ! empty( $_GET['orderby'] ) ) {
+            $orderby = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
+        } else {
+            $orderby = 'form_name';
+        }
+        
+        if ( $nonce_verified && ! empty( $_GET['order'] ) ) {
+            $order = sanitize_text_field( wp_unslash( $_GET['order'] ) );
+        } else {
+            $order = 'asc';
+        }
+        
+        $result = strcmp( $a[$orderby], $b[$orderby] );  
+        return ( $order === 'asc' ) ? $result : -$result;
+      }
     
     /**
     * Method for group_name column
@@ -114,23 +129,34 @@ class CubeWp_Forms_Table extends WP_List_Table{
     protected function process_bulk_action() {
 		// Detect when a bulk action is being triggered.
 		if ( 'delete' === $this->current_action() ) { 
-            $nonce = esc_html( $_REQUEST['_wpnonce'] );
-            if(wp_verify_nonce( $nonce, 'bulk-' . $this->_args['plural'] ) ) {
-                if(isset($_REQUEST['cwp_group_bulk_action'])){
-                    $bulk_request = CubeWp_Sanitize_text_Array($_REQUEST['cwp_group_bulk_action']);
-                   foreach($bulk_request as $group){
-                       wp_delete_post($group, true);
-                   } 
-                }                                
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            if ( isset( $_REQUEST['_wpnonce'] ) ) {
+                $nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) );
+                if ( wp_verify_nonce( $nonce, 'bulk-' . $this->_args['plural'] ) ) {
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+                    if ( isset( $_REQUEST['cwp_group_bulk_action'] ) ) {
+                        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+                        $bulk_request = CubeWp_Sanitize_text_Array( $_REQUEST['cwp_group_bulk_action'] );
+                        foreach( $bulk_request as $group ) {
+                            wp_delete_post( $group, true );
+                        } 
+                    }                                
+                }
             }
         }
-        if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
-            $nonce = esc_html( $_REQUEST['_wpnonce'] );
-            if(wp_verify_nonce( $nonce, 'cwp_delete_group')) {
-                if(isset($_REQUEST['groupid'])){
-                    wp_delete_post(sanitize_text_field($_REQUEST['groupid']), true);
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ( isset( $_REQUEST['action'] ) && 'delete' === sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            if ( isset( $_REQUEST['_wpnonce'] ) ) {
+                $nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) );
+                if ( wp_verify_nonce( $nonce, 'cwp_delete_group' ) ) {
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                    if ( isset( $_REQUEST['groupid'] ) ) {
+                        wp_delete_post( sanitize_text_field( wp_unslash( $_REQUEST['groupid'] ) ), true );
+                    }
+                    wp_safe_redirect( CubeWp_Submenu::_page_action('cubewp-form-fields') );
+                    exit();
                 }
-                wp_redirect( CubeWp_Submenu::_page_action('cubewp-form-fields') );
             }
         }
         

@@ -1,12 +1,13 @@
-=== CubeWP Forms - All-in-One Form Builder ===
+=== CubeWP Forms ===
 Contributors: cubewp1211, teamcubewp
-Donate link: NA
+Donate link: https://cubewp.com/
 Tags: Contact form, Lead form, leads management, custom fields, conditional fields
 Requires at least: 5.0
 Requires PHP: 7.0
-Tested up to: 6.8
-Stable tag: 1.1.8
+Tested up to: 6.9
+Stable tag: 1.1.10
 License: GPLv2 or later
+
 
 CubeWP Forms is a 100% free drag-and-drop builder for creating contact forms, lead gen forms, appointment request forms, and newsletter signup forms.
 
@@ -251,6 +252,20 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+
+= 1.1.10 2026-01-08
+
+FIXED: Resolved a fatal error in the CubeWP Framework dependency notice caused by incorrect sprintf() placeholder usage, which resulted in an empty plugin name in the admin notice.
+
+= 1.1.9 2025-12-09
+
+FIXED: Improved compatibility with WordPress 6.9.
+SECURITY: Fixed multiple vulnerabilities and enhanced protection against unauthorized data access.
+IMPROVED: Strengthened input sanitization and validation for safer form submissions and data handling.
+CODE QUALITY: Updated function naming to follow best practices, improving readability and preventing conflicts.
+COMPATIBILITY: Refined the_content filter behavior for more reliable output rendering.
+ADDED: “Regenerate Form Types” setting with automatic rebuilding when required, and fixed dropdown population using a consistent options structure.
 
 = 1.1.8 2025-09-15
 
