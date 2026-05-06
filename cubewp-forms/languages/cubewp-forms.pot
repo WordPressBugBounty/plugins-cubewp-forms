@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cubewp-framework\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-08 14:42+0500\n"
+"POT-Creation-Date: 2026-05-06 15:10+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: cland <cubewp@gmail.com>\n"
 "Language-Team: Cridio <contact@cubewp.com>\n"
@@ -64,7 +64,7 @@ msgid "View Details"
 msgstr ""
 
 #: cube/classes/class-cubewp-forms-dashboard.php:257
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:233
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:242
 msgid "Sorry! Security Verification Failed."
 msgstr ""
 
@@ -213,19 +213,19 @@ msgid "Form Type"
 msgstr ""
 
 #: cube/classes/class-cubewp-forms-frontend-custom-form.php:103
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:791
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:887
 msgid "Submit"
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:283
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:300
 msgid "Form Entry Details"
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:374
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:391
 msgid "Success! The submission was successful."
 msgstr ""
 
-#: cube/classes/class-cubewp-forms-frontend-custom-form.php:427
+#: cube/classes/class-cubewp-forms-frontend-custom-form.php:454
 #, php-format
 msgid "You have received a new entry from %s"
 msgstr ""
@@ -324,24 +324,6 @@ msgstr ""
 
 #: cube/classes/class-cubewp-forms-table.php:100
 msgid "Edit"
-msgstr ""
-
-#: cube/classes/class-cubewp-forms-templates.php:116
-#: cube/classes/class-cubewp-forms-templates.php:126
-#: cube/classes/class-cubewp-forms-templates.php:129
-#: cube/classes/class-cubewp-forms-templates.php:132
-#: cube/classes/class-cubewp-forms-templates.php:135
-#: cube/classes/class-cubewp-forms-templates.php:145
-#: cube/classes/class-cubewp-forms-templates.php:146
-#: cube/classes/class-cubewp-forms-templates.php:147
-#: cube/classes/class-cubewp-forms-templates.php:148
-#: cube/classes/class-cubewp-forms-templates.php:149
-#: cube/classes/class-cubewp-forms-templates.php:150
-#: cube/classes/class-cubewp-forms-templates.php:159
-#: cube/classes/class-cubewp-forms-templates.php:160
-#: cube/classes/class-cubewp-forms-templates.php:161
-#: cube/classes/class-cubewp-forms-templates.php:162
-msgid "image"
 msgstr ""
 
 #: cube/classes/class-cubewp-forms-ui.php:80
@@ -459,8 +441,8 @@ msgstr ""
 #: cube/classes/class-cubewp-forms-ui.php:346
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:155
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:178
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:755
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:775
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:851
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:871
 msgid "Center"
 msgstr ""
 
@@ -629,22 +611,22 @@ msgid "Select Form"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:111
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:732
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:828
 msgid "Display"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:115
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:736
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:832
 msgid "Block"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:116
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:737
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:833
 msgid "Flex"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:117
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:738
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:834
 msgid "Inline Block"
 msgstr ""
 
@@ -669,94 +651,94 @@ msgid "Column Reverse"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:149
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:749
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:845
 msgid "Justify Content"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:153
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:176
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:753
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:773
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:849
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:869
 msgid "Start"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:154
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:177
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:754
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:774
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:850
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:870
 msgid "End"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:156
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:756
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:852
 msgid "Space Between"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:157
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:757
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:853
 msgid "Space Around"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:158
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:758
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:854
 msgid "Space Evenly"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:172
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:769
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:865
 msgid "Align Items"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:179
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:776
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:872
 msgid "Stretch"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:180
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:777
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:873
 msgid "Baseline"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:195
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:275
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:405
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:605
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:932
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1009
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:621
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1028
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1105
 msgid "Background"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:205
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:286
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:415
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:615
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:942
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1019
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:631
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1038
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1115
 msgid "Border"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:213
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:295
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:423
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:635
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:950
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1027
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:705
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1046
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1123
 msgid "Border Radius"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:226
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:309
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:436
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:963
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1040
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1059
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1136
 msgid "Box Shadow"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:234
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:318
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:444
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:690
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1061
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:786
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1157
 msgid "Padding"
 msgstr ""
 
@@ -765,8 +747,8 @@ msgstr ""
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:378
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:456
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:522
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:710
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1074
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:806
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1170
 msgid "Margin"
 msgstr ""
 
@@ -808,14 +790,14 @@ msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:497
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:549
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:896
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:992
 msgid "Typography"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:508
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:573
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:904
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:981
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:589
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1000
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1077
 msgid "Text Color"
 msgstr ""
 
@@ -823,68 +805,88 @@ msgstr ""
 msgid "Input & Select Fields"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:592
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:574
+msgid "Placeholder Typography"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:608
 msgid "Placeholder Color"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:623
-msgid "Border Color (Focus)"
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:642
+msgid "Border (Focus)"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:656
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:667
+msgid "Background (Focus)"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:675
+msgid "Border Radius (Focus)"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:690
+msgid "Box Shadow (Focus)"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:726
 msgid "Height"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:724
-msgid "Submit Button"
-msgstr ""
-
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:789
-msgid "Button Text"
-msgstr ""
-
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:802
-msgid "Icon"
-msgstr ""
-
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:815
-msgid "Icon Position"
-msgstr ""
-
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:819
-msgid "Before"
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:760
+msgid "Textarea Height"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:820
-msgid "After"
+msgid "Submit Button"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:831
-msgid "Icon Size"
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:885
+msgid "Button Text"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:857
-msgid "Icon Spacing"
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:898
+msgid "Icon"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:888
-msgid "Normal"
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:911
+msgid "Icon Position"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:915
+msgid "Before"
 msgstr ""
 
 #: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:916
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:993
+msgid "After"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:927
+msgid "Icon Size"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:953
+msgid "Icon Spacing"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:984
+msgid "Normal"
+msgstr ""
+
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1012
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1089
 msgid "Icon Color"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:974
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1070
 msgid "Hover"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1048
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1144
 msgid "Hover Animation"
 msgstr ""
 
-#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1087
+#: cube/classes/elementor-widgets/class-cubewp-forms-widget.php:1183
 msgid "Button Container Width"
 msgstr ""
 
@@ -954,4 +956,13 @@ msgstr ""
 
 #: cube/functions/functions.php:572
 msgid "Mailchimp Field ID"
+msgstr ""
+
+#: cubewp-forms.php:88
+#, php-format
+msgid "%s is required to run CubeWP Forms."
+msgstr ""
+
+#: cubewp-forms.php:92
+msgid "CubeWP Framework"
 msgstr ""

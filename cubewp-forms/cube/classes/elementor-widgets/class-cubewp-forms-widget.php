@@ -567,6 +567,22 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name'     => 'form_fields_typography_placeholder',
+                'label'    => __('Placeholder Typography', 'cubewp-forms'),
+                'selector' => '{{WRAPPER}} .cwp-frontend-form-container input[type="text"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container input[type="email"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container input[type="number"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container input[type="url"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container input[type="tel"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container input[type="date"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container input[type="time"]::placeholder,
+                               {{WRAPPER}} .cwp-frontend-form-container textarea::placeholder',
+            ]
+        );
+
         $this->add_control(
             'form_fields_text_color',
             [
@@ -617,14 +633,68 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
-        $this->add_control(
-            'form_input_field_focus_color',
+        $focus_selector = '{{WRAPPER}} .cwp-frontend-form-container input:focus, {{WRAPPER}} .cwp-frontend-form-container textarea:focus, {{WRAPPER}} .cwp-frontend-form-container select:focus';
+
+        $this->add_group_control(
+            Group_Control_Border::get_type(),
             [
-                'label'     => __('Border Color (Focus)', 'cubewp-forms'),
-                'type'      => Controls_Manager::COLOR,
-                'selectors' => [
-                    '{{WRAPPER}} .cwp-frontend-form-container input:focus'   => 'border-color: {{VALUE}} !important;',
-                    '{{WRAPPER}} .cwp-frontend-form-container textarea:focus' => 'border-color: {{VALUE}} !important;',
+                'name'           => 'form_fields_focus_border',
+                'label'          => __('Border (Focus)', 'cubewp-forms'),
+                'selector'       => $focus_selector,
+                'fields_options' => [
+                    'border' => [
+                        'selectors' => [
+                            '{{SELECTOR}}' => 'border-style: {{VALUE}} !important;',
+                        ],
+                    ],
+                    'width'  => [
+                        'selectors' => [
+                            '{{SELECTOR}}' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                        ],
+                    ],
+                    'color'  => [
+                        'selectors' => [
+                            '{{SELECTOR}}' => 'border-color: {{VALUE}} !important;',
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name'     => 'form_fields_background_focus',
+				'label'    => __('Background (Focus)', 'cubewp-forms'),
+				'types'    => ['classic', 'gradient'],
+				'selector' => $focus_selector,
+			]
+		);
+        $this->add_control(
+            'form_fields_focus_border_radius',
+            [
+                'label'      => __('Border Radius (Focus)', 'cubewp-forms'),
+                'type'       => Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%', 'em'],
+                'selectors'  => [
+                    '{{WRAPPER}} .cwp-frontend-form-container input:focus'   => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                    '{{WRAPPER}} .cwp-frontend-form-container textarea:focus' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                    '{{WRAPPER}} .cwp-frontend-form-container select:focus'   => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Box_Shadow::get_type(),
+            [
+                'name'           => 'form_fields_focus_box_shadow',
+                'label'          => __('Box Shadow (Focus)', 'cubewp-forms'),
+                'selector'       => $focus_selector,
+                'fields_options' => [
+                    'box_shadow' => [
+                        'selectors' => [
+                            '{{SELECTOR}}' => 'box-shadow: {{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{SPREAD}}px {{COLOR}} {{box_shadow_position.VALUE}} !important;',
+                        ],
+                    ],
                 ],
             ]
         );
@@ -685,6 +755,32 @@ class CubeWP_Forms_Widget extends Widget_Base
         );
 
         $this->add_responsive_control(
+            'form_fields_height_textarea',
+            [
+                'label'      => __('Textarea Height', 'cubewp-forms'),
+                'type'       => Controls_Manager::SLIDER,
+                'size_units' => ['px', 'em', 'vh'],
+                'range'      => [
+                    'px' => [
+                        'min' => 20,
+                        'max' => 200,
+                    ],
+                    'em' => [
+                        'min' => 1,
+                        'max' => 10,
+                    ],
+                    'vh' => [
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+                'selectors'  => [
+                    '{{WRAPPER}} .cwp-frontend-form-container textarea'   => 'height: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
             'form_fields_padding',
             [
                 'label'      => __('Padding', 'cubewp-forms'),
@@ -738,7 +834,7 @@ class CubeWP_Forms_Widget extends Widget_Base
                     'inline-block' => __('Inline Block', 'cubewp-forms'),
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .cwp-form-submit-container' => 'display: {{VALUE}};',
+                    '{{WRAPPER}} .cwp-form-submit-container  button.cwp-from-submit' => 'display: {{VALUE}};',
                 ],
             ]
         );
@@ -758,7 +854,7 @@ class CubeWP_Forms_Widget extends Widget_Base
                     'space-evenly'  => __('Space Evenly', 'cubewp-forms'),
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .cwp-form-submit-container' => 'justify-content: {{VALUE}};',
+                    '{{WRAPPER}} .cwp-form-submit-container  button.cwp-from-submit' => 'justify-content: {{VALUE}};',
                 ],
             ]
         );
@@ -777,7 +873,7 @@ class CubeWP_Forms_Widget extends Widget_Base
                     'baseline'   => __('Baseline', 'cubewp-forms'),
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .cwp-form-submit-container' => 'align-items: {{VALUE}};',
+                    '{{WRAPPER}} .cwp-form-submit-container  button.cwp-from-submit' => 'align-items: {{VALUE}};',
                 ],
             ]
         );

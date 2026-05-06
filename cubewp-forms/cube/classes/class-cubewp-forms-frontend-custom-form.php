@@ -114,12 +114,21 @@ class CubeWp_Forms_Frontend_Custom_Form
         add_filter('cubewp/frontend/post/repeating_field/args', array($this, 'repeating_field_form_name'));
 
         $single_input = is_single() || is_page() ? '<input type="hidden" value="' . get_the_ID() . '" name="cwp_custom_form[single_post]" >' : '';
+        $author_input = '';
+        if (is_author()) {
+            $author = get_queried_object();
+            $author_id = isset($author->ID) ? absint($author->ID) : 0;
+            if (!empty($author_id)) {
+                $author_input = '<input type="hidden" value="' . esc_attr($author_id) . '" name="cwp_custom_form[author_user]" >';
+            }
+        }
 
         $output = '<div class="cwp-frontend-form-container">
         <form method="post" id="' . esc_attr($submit_form_id) . '" class="cwp-custom-form ' . esc_attr($form_class) . '" action="" enctype="multipart/form-data">
         <input type="hidden" name="cwp_custom_form[form_id]" value="' . esc_attr($form_id) . '">
         <input type="hidden" name="cwp_custom_form[form_data_id]" value="' . uniqid(wp_rand()) . '">
         ' . $single_input . '
+        ' . $author_input . '
         <div class="tab-content">';
         $section_data['fields'] = $form_fields;
         $output .= $this->frontend_form_section($section_data, $form_id);
@@ -243,6 +252,7 @@ class CubeWp_Forms_Frontend_Custom_Form
             $data_id        = isset($_POST['cwp_custom_form']['form_data_id'])    ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['form_data_id'])) : 0;
             $form_id        = isset($_POST['cwp_custom_form']['form_id'])    ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['form_id'])) : 0;
             $single_form    = isset($_POST['cwp_custom_form']['single_post']) ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['single_post'])) : '';
+            $author_user    = isset($_POST['cwp_custom_form']['author_user']) ? absint(wp_unslash($_POST['cwp_custom_form']['author_user'])) : 0;
            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash , WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
             $metas          = isset($_POST['cwp_custom_form']['fields'])  ? CubeWp_Forms_Sanitize_Fields_Array($_POST['cwp_custom_form']['fields'], 'custom_forms') : '';
 
@@ -269,6 +279,13 @@ class CubeWp_Forms_Frontend_Custom_Form
                     update_user_meta($single_author, '_cwp_custom_form_data_id', json_encode($user_form_data_id));
                 }
                 $form_data['single_post'] = $single_form;
+            }
+            if (!empty($author_user)) {
+                $form_data['post_author'] = $author_user;
+                $user_form_data_id = json_decode(get_user_meta($author_user, '_cwp_custom_form_data_id', true));
+                $user_form_data_id = is_object($user_form_data_id) ? $user_form_data_id : (object) $user_form_data_id;
+                $user_form_data_id->$data_id = $author_user;
+                update_user_meta($author_user, '_cwp_custom_form_data_id', json_encode($user_form_data_id));
             }
 
             /////////////////
@@ -415,7 +432,17 @@ class CubeWp_Forms_Frontend_Custom_Form
 				CubeWp_Forms_Emails::cubewp_send_email(  $reply_to, $user_template, $form_data, $headers );
 			}
 		}
-		if( !empty($admin_templates) && !empty($emails) ){
+        $lead_author_email = '';
+        if (!empty($form_data['post_author'])) {
+            $lead_author = get_userdata((int) $form_data['post_author']);
+            if ($lead_author && !empty($lead_author->user_email) && is_email($lead_author->user_email)) {
+                $lead_author_email = sanitize_email($lead_author->user_email);
+                if (!in_array($lead_author_email, $emails, true)) {
+                    $emails[] = $lead_author_email;
+                }
+            }
+        }
+        if( !empty($admin_templates) && !empty($emails) ){
 			foreach( $admin_templates as $admin_template){
 				CubeWp_Forms_Emails::cubewp_send_email( $emails, $admin_template, $form_data, $headers );
 			}

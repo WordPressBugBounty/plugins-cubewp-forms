@@ -5,7 +5,7 @@ Tags: Contact form, Lead form, leads management, custom fields, conditional fiel
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.9
-Stable tag: 1.1.10
+Stable tag: 1.1.11
 License: GPLv2 or later
 
 
@@ -253,6 +253,14 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 == Changelog ==
 
+
+
+= 1.1.11 2026-05-06
+
+FIXED: Form and WYSIWYG editor now reset and clear properly after successful CubeWP custom form submission.
+ADDED: Focus state styling controls for input fields and textarea in CubeWP Forms Widget, along with placeholder typography and textarea height controls.
+ADDED: Auto author assignment support for CubeWP custom forms on author archive pages, linking submissions to the correct author for improved lead tracking.
+IMPROVED: Simplified CubeWP Forms Templates UI by removing the sidebar section for a cleaner and more focused layout.
 
 = 1.1.10 2026-01-08
 
