@@ -462,6 +462,20 @@ class CubeWP_Forms_Widget extends Widget_Base
             ]
         );
 
+        $this->add_control(
+			'field_container_overflow',
+			[
+				'label' => __('Overflow Hidden', 'cubewp-forms'),
+				'type'  => Controls_Manager::SWITCHER,
+				'label_on' => __('Yes', 'cubewp-forms'),
+				'label_off' => __('No', 'cubewp-forms'),
+				'return_value' => 'hidden',
+				'selectors' => [
+					'{{WRAPPER}} .cwp-frontend-section-container .cwp-field-container' => 'overflow: {{VALUE}};',
+				],
+			]
+		);
+
         $this->end_controls_section();
 
         // --- Labels Styling ---

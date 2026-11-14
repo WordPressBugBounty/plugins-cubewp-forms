@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 if (! function_exists('cwp_leads_create_database')) {
     // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
     function cwp_leads_create_database()
@@ -648,6 +652,9 @@ add_action('wp_ajax_get_email_template_data', 'get_email_template_data_callback'
 function get_email_template_data_callback()
 {
 
+    if (! current_user_can('manage_options')) {
+        wp_send_json_error('Unauthorized access', 403);
+    }
     $fields = array();
     // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
     $_post = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';

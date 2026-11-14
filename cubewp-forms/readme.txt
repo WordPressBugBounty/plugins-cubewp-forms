@@ -2,10 +2,10 @@
 Contributors: cubewp1211, teamcubewp
 Donate link: https://cubewp.com/
 Tags: Contact form, Lead form, leads management, custom fields, conditional fields
-Requires at least: 5.0
+Requires at least: 5.3
 Requires PHP: 7.0
-Tested up to: 6.9
-Stable tag: 1.1.11
+Tested up to: 7.1
+Stable tag: 1.1.12
 License: GPLv2 or later
 
 
@@ -253,7 +253,16 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 == Changelog ==
 
+= 1.1.12 2026-11-11
 
+SECURITY: Lead details can now only be viewed by the owner of the listing the enquiry was sent to, or by an administrator. Previously any logged-in user who knew a lead id could read that lead through the dashboard AJAX endpoint. Reported by Aabideen Bangash.
+SECURITY: Field labels and submitted values are now escaped before being returned by the lead details endpoint.
+SECURITY: The form submission REST route no longer leaves the request data in place of $_POST for the remainder of the request.
+SECURITY: Added a capability check to the email template AJAX handler, which previously verified only a nonce.
+ADDED: Form submissions through the REST route are now rate limited per visitor to prevent automated flooding. The limit can be adjusted with the cubewp_forms_submission_rate_limit filter.
+FIXED: The submission rate limit now identifies visitors correctly on sites behind a proxy or CDN, where all visitors previously shared the same address and could block one another.
+CHANGED: Removed the diagnostic logging of request origin, user agent and address hashes that was recorded on public form submissions.
+ADDED: Overflow Hidden control for field containers in the CubeWP Forms Widget.
 
 = 1.1.11 2026-05-06
 

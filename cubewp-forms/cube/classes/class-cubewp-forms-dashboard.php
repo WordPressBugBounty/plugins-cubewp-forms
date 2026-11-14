@@ -250,7 +250,7 @@ class CubeWp_Forms_Dashboard
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
-        if ( ! isset( $_POST['security_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['security_nonce'] ), "cubewp_forms_dashboard" ) ) {
+        if ( ! isset( $_POST['security_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['security_nonce'] ) ), "cubewp_forms_dashboard" ) ) {
             wp_send_json(
                 array(
                     'type' => 'error',
@@ -264,9 +264,15 @@ class CubeWp_Forms_Dashboard
         // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
         if ( isset( $_POST['lead_id'] ) ) {
             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
-            $leadid = sanitize_text_field( $_POST['lead_id'] );
+            $leadid = sanitize_text_field( wp_unslash( $_POST['lead_id'] ) );
         }
         $form_data = cwp_forms_all_leads_by_lead_id($leadid);
+        // Security (2026-09-17): a lead may only be read by the owner of the listing it
+        // was sent to (or an administrator). Any logged-in user used to be able to read
+        // any enquiry by id.
+        if (empty($form_data) || (!current_user_can('manage_options') && (int) get_current_user_id() !== (int) ($form_data['post_author'] ?? 0))) {
+            $form_data = array();
+        }
         $form_output = '';
         if (isset($form_data['fields']) && !empty($form_data['fields'])) {
             $form_fields =  CWP()->get_custom_fields('custom_forms');
@@ -278,7 +284,7 @@ class CubeWp_Forms_Dashboard
                 if ($field_type == 'repeating_field') {
                     if (is_array($lead) && !empty($lead)) {
                         $form_output .= '<div class="cwp-forms-field">';
-                        $form_output .= '<h6>' . $field_data['label'] . '</h6>';
+                        $form_output .= '<h6>' . esc_html( $field_data['label'] ) . '</h6>';
                         $form_output .= '<div class="cwp-forms-repeating-fields">';
                         foreach ($lead as $k => $val) {
                             foreach ($val as $_k => $_val) {
@@ -286,8 +292,8 @@ class CubeWp_Forms_Dashboard
                                 if (isset($_val) && !empty($_val)) {
                                     $label = isset($form_fields[$_k]['label']) ? $form_fields[$_k]['label'] : '';
                                     $form_output .= '<div class="cwp-forms-repeating-field">';
-                                    $form_output .= '<h6>' . $label . '</h6>';
-                                    $form_output .= '<p>' . CubeWp_Forms_Leads::cwp_forms_render_value($type, $_val) . '</p>';
+                                    $form_output .= '<h6>' . esc_html( $label ) . '</h6>';
+                                    $form_output .= '<p>' . wp_kses_post( CubeWp_Forms_Leads::cwp_forms_render_value($type, $_val) ) . '</p>';
                                     $form_output .= '</div>';
                                 }
                             }
@@ -299,8 +305,8 @@ class CubeWp_Forms_Dashboard
                     if (isset($lead) && !empty($lead)) {
                         $label = isset($field_data['label']) ? $field_data['label'] : '';
                         $form_output .= '<div class="cwp-forms-field">';
-                        $form_output .= '<h6>' . $label . '</h6>';
-                        $form_output .= '<p>' . $lead . '</p>';
+                        $form_output .= '<h6>' . esc_html( $label ) . '</h6>';
+                        $form_output .= '<p>' . wp_kses_post( $lead ) . '</p>';
                         $form_output .= '</div>';
                     }
                 }
