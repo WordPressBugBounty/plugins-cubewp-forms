@@ -44,7 +44,10 @@ class CubeWp_Forms_Rest_API extends WP_REST_Controller
 			'submit/',
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					// Security (M2): CREATABLE, not READABLE. A GET that writes is
+					// reachable from an <img> tag and is cacheable. See
+					// cubewp_update_forms() for why the GET could be retired.
+					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'cubewp_update_forms' ),
 					'permission_callback' => array( $this, 'get_without_permission_check' ),
 					'args'                => $this->get_render_params(),
@@ -163,16 +166,32 @@ class CubeWp_Forms_Rest_API extends WP_REST_Controller
 	{
 		$CWP_QUERY = $request->get_param(self::CWP_QUERY);
 
-		if (!empty($CWP_QUERY) && count($CWP_QUERY) > 0) {
+		if (is_array($CWP_QUERY) && count($CWP_QUERY) > 0) {
 			/*
 			 * The submission handler reads from $_POST, so the request data is
 			 * placed there for the duration of the call and the original value is
 			 * restored immediately afterwards, leaving the superglobal unchanged
 			 * for any later hook in the same request.
+			 *
+			 * Security (M2 closed): the route no longer MINTS the nonce it then
+			 * checks, and it accepts POST only (see register_routes()).
+			 *
+			 * This line used to set security_nonce to a freshly created
+			 * 'cubewp_forms_submit' nonce, so the form's CSRF check could never
+			 * fail for anyone who called this route instead of the form. Now the
+			 * caller's own security_nonce is passed through untouched, and
+			 * cubewp_submit_custom_form() verifies it exactly as it does for the
+			 * form's normal admin-ajax submission. A caller gets that nonce the
+			 * same way the form does - from the rendered page - so a genuine
+			 * integration keeps working and a blind script does not.
+			 *
+			 * Safe to change: the plugin's own front end submits through
+			 * admin-ajax (custom-form-submit.js), never through this route; and
+			 * on the CubeWP fleet (2026-11-16) no caller was recorded on any
+			 * site, while 14 days of access logs held two scanner-shaped hits.
 			 */
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Superglobal is only snapshotted here so it can be restored below; the request itself is authorised by the REST permission callback.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Superglobal is only snapshotted here so it can be restored below; the nonce is verified by cubewp_submit_custom_form().
 			$original_post = $_POST;
-			$CWP_QUERY['security_nonce'] = wp_create_nonce('cubewp_forms_submit');
 			// Simulate the $_POST array with the received $CWP_QUERY data
 			$_POST = $CWP_QUERY;
 

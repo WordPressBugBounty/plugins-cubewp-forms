@@ -103,12 +103,15 @@ class CubeWp_Forms_Data_Table extends WP_List_Table
 	}
 	protected function process_bulk_action()
 	{
+		// Deleting leads is an administrator action.
+		if (! current_user_can('manage_options')) {
+			return;
+		}
 		// Detect when a bulk action is being triggered.
 		if ('delete' === $this->current_action()) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if (isset($_REQUEST['_wpnonce'])) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
-				$nonce = sanitize_text_field($_REQUEST['_wpnonce']);
+				$nonce = sanitize_text_field(wp_unslash($_REQUEST['_wpnonce']));
 				if (wp_verify_nonce($nonce, 'bulk-' . $this->_args['plural'])) {
 					if (isset($_REQUEST['cwp_group_bulk_action'])) { 
 						// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
@@ -121,18 +124,16 @@ class CubeWp_Forms_Data_Table extends WP_List_Table
 			}
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		if (isset($_REQUEST['action']) && 'delete' === sanitize_text_field(wp_unslash($_REQUEST['action']))) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if (isset($_REQUEST['_wpnonce'])) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash	
-				$nonce = sanitize_text_field($_REQUEST['_wpnonce']);
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	
+				$nonce = sanitize_text_field(wp_unslash($_REQUEST['_wpnonce']));
 				if (wp_verify_nonce($nonce, 'cwp_delete_group')) {
 					if (isset($_REQUEST['leadid'])) {
-						// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-						$leadid = $_REQUEST['leadid'];
+						// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						$leadid = sanitize_text_field(wp_unslash($_REQUEST['leadid']));
 						cwp_remove_lead($leadid);
-					} 
+					}
 					wp_safe_redirect(CubeWp_Submenu::_page_action('cubewp-custom-form-data')); 
 					exit();
 				}

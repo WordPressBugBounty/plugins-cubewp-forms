@@ -5,7 +5,7 @@ Tags: Contact form, Lead form, leads management, custom fields, conditional fiel
 Requires at least: 5.3
 Requires PHP: 7.0
 Tested up to: 7.1
-Stable tag: 1.1.12
+Stable tag: 1.1.13
 License: GPLv2 or later
 
 
@@ -252,6 +252,14 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+= 1.1.13 2026-11-16
+
+SECURITY: Field labels and submitted values are now escaped on the admin Leads screen, on both the standard and the repeating field branches.
+SECURITY: Form names and tab identifiers are now escaped on the frontend dashboard lead tabs.
+SECURITY: Added capability checks to the lead delete, form delete and form builder save handlers, which previously verified only a nonce.
+SECURITY: The form submission REST route now accepts POST only and verifies the submitted nonce instead of creating one, so the form's own security check also applies to API submissions.
+SECURITY: Stored lead data can no longer instantiate PHP objects when it is read back.
 
 = 1.1.12 2026-11-11
 

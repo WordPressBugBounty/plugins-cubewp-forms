@@ -586,6 +586,10 @@ class CubeWp_Forms_UI extends CubeWp_Custom_Fields_Processor {
      * @since  1.0.0
      */
     protected static function save_group() {
+        // Building forms is an administrator action.
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
         // Verify nonce for form submission
         if ( ! isset( $_POST['cwp_form_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cwp_form_nonce'] ) ), basename( __FILE__ ) ) ) {
             return;

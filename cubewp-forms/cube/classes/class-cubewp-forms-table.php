@@ -127,8 +127,12 @@ class CubeWp_Forms_Table extends WP_List_Table{
 		return $actions;
 	}
     protected function process_bulk_action() {
+		// Deleting forms is an administrator action.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 		// Detect when a bulk action is being triggered.
-		if ( 'delete' === $this->current_action() ) { 
+		if ( 'delete' === $this->current_action() ) {
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             if ( isset( $_REQUEST['_wpnonce'] ) ) {
                 $nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) );

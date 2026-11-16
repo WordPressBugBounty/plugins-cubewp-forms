@@ -155,7 +155,8 @@ class CubeWp_Forms_Leads {
         $form_fields =  CWP()->get_custom_fields( 'custom_forms' );
         if(isset($form_data['fields']) && !empty($form_data['fields'])){
             $output .=  ' <table>';
-            $fields = unserialize($form_data['fields']);
+            // Stored lead data is an array of scalars; refuse to instantiate objects.
+            $fields = unserialize($form_data['fields'], array('allowed_classes' => false));
             foreach($fields as $key=> $lead){
                 $data = isset($form_fields[$key]) ? $form_fields[$key] : array();
                 $field_type = isset($data['type']) ? $data['type'] : "";
@@ -176,12 +177,12 @@ class CubeWp_Forms_Leads {
                 }
                 if($field_type == 'repeating_field'){
                     $output .= '<tr>
-                    <th>'.$data['label'].'</th>
+                    <th>'.esc_html(isset($data['label']) ? $data['label'] : '').'</th>
                     <td class="cwp-forms-repeating-fields">';
                     foreach($repeater['label'] as $k => $label){
                         if(isset($repeater['value'][$k]) && !empty($repeater['value'][$k])){
                             $output .= '<div class="cwp-forms-repeating-field">';
-                            $output .= '<h6>'.$label.' </h6><p>'.$repeater['value'][$k].'</p>';
+                            $output .= '<h6>'.esc_html($label).' </h6><p>'.wp_kses_post($repeater['value'][$k]).'</p>';
                             $output .= '</div>';
                         }
                     }
@@ -190,8 +191,8 @@ class CubeWp_Forms_Leads {
                     if(!empty($value)){
                         $label = isset($data['label']) ? $data['label'] : '';
                         $output .= ' <tr>
-                        <th>'.$label.'</th>
-                        <td>'.$value.'</td>
+                        <th>'.esc_html($label).'</th>
+                        <td>'.wp_kses_post($value).'</td>
                         </tr>';
                     }
                 }

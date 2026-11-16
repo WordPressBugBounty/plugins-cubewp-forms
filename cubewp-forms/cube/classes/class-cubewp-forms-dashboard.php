@@ -49,7 +49,8 @@ class CubeWp_Forms_Dashboard
                 if(isset($leads['dete_time']) && !empty(isset($leads['dete_time']))){
                     $data[$leads['form_id']][$leadid]['dete_time'] = $leads['dete_time'];
                 }
-                $fields = unserialize($leads['fields']);
+                // Stored lead data is an array of scalars; refuse to instantiate objects.
+                $fields = unserialize($leads['fields'], array('allowed_classes' => false));
                 foreach($fields as $key=> $lead){
                     if(isset($form_fields[$key])){
                         $field_data = $form_fields[$key];
@@ -113,8 +114,8 @@ class CubeWp_Forms_Dashboard
         foreach ($form_details as $form_id => $form_detail) {
             $form_name = $form_detail['form_name'];
             $active_class = $keyind == 0 ? 'cwp-active-tab' : '';
-            $output .= '<li class="cwp-author-' . $form_id . '-tab ' . $active_class . '">
-                        <a class="list-group-item" data-toggle="tab" href="#cwp-author-' . $form_id . '">' . $form_name . '</a>
+            $output .= '<li class="cwp-author-' . esc_attr( $form_id ) . '-tab ' . esc_attr( $active_class ) . '">
+                        <a class="list-group-item" data-toggle="tab" href="#cwp-author-' . esc_attr( $form_id ) . '">' . esc_html( $form_name ) . '</a>
                         </li>';
             $keyind++;
         }
@@ -138,7 +139,7 @@ class CubeWp_Forms_Dashboard
             unset($form_detail['form_name']);
             $active_class = $keyind == 0 ? 'cwp-active-tab-content' : '';
             if (count($form_details) > 1) {
-                $output .= '<div class="cwp-tab-content ' . $active_class . '" id="cwp-author-' . $form_id . '">';
+                $output .= '<div class="cwp-tab-content ' . esc_attr( $active_class ) . '" id="cwp-author-' . esc_attr( $form_id ) . '">';
             }
             $output .= '<div class="cwp-dashboard-content-table-container">
                     <table class="cwp-dashboard-content-table">
@@ -276,7 +277,8 @@ class CubeWp_Forms_Dashboard
         $form_output = '';
         if (isset($form_data['fields']) && !empty($form_data['fields'])) {
             $form_fields =  CWP()->get_custom_fields('custom_forms');
-            $fields = unserialize($form_data['fields']);
+            // Stored lead data is an array of scalars; refuse to instantiate objects.
+            $fields = unserialize($form_data['fields'], array('allowed_classes' => false));
             foreach ($fields as $key => $lead) {
                 $field_data = isset($form_fields[$key]) ? $form_fields[$key] : '';
                 $field_label = isset($field_data['label']) ? $field_data['label'] : '';

@@ -24,7 +24,7 @@ class CubeWp_Forms_Custom {
 	 *
 	 * @var string
 	 */
-	public static $CubeWp_Forms_version = '1.1.12';
+	public static $CubeWp_Forms_version = '1.1.13';
 	/**
 	 * The single instance of the class.
 	 *
