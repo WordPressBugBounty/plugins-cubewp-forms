@@ -5,7 +5,7 @@ Tags: Contact form, Lead form, leads management, custom fields, conditional fiel
 Requires at least: 5.3
 Requires PHP: 7.0
 Tested up to: 7.1
-Stable tag: 1.1.13
+Stable tag: 1.1.14
 License: GPLv2 or later
 
 
@@ -252,6 +252,12 @@ To getting started with the plugin, please go to [Documentation](https://support
 
 
 == Changelog ==
+
+= 1.1.14 2026-11-23
+
+SECURITY: Fixed a stored cross-site scripting issue in the admin Leads list. The submission id sent with a form was stored as the lead id and printed into the row checkbox without escaping, so an unauthenticated visitor could submit a form that ran script when an administrator opened the list.
+SECURITY: Submission ids are now restricted to letters and numbers when a form is submitted, matching the format the form itself generates.
+SECURITY: The lead id, form name, user, source and date values are now escaped before they are printed in the admin Leads list.
 
 = 1.1.13 2026-11-16
 

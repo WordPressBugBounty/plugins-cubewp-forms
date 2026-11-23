@@ -39,7 +39,8 @@ class CubeWp_Forms_Data_Table extends WP_List_Table
 	 */
 	public function column_default($item, $column_name)
 	{
-		return isset($item[$column_name]) ? $item[$column_name] : '-';
+		// Lead values are visitor supplied; escape before printing.
+		return isset($item[$column_name]) ? esc_html($item[$column_name]) : '-';
 	}
 
 	/**
@@ -68,7 +69,7 @@ class CubeWp_Forms_Data_Table extends WP_List_Table
 	 */
 	function column_form_name($item)
 	{
-		$title = sprintf('<a href="%s"><strong>' . $item['form_name'] . '</strong></a>', CubeWp_Submenu::_page_action('cubewp-custom-form-data', 'edit', '&leadid=' . esc_attr($item['ID']), '&_wpnonce=' . wp_create_nonce('cwp_edit_group')));
+		$title = sprintf('<a href="%s"><strong>' . esc_html($item['form_name']) . '</strong></a>', CubeWp_Submenu::_page_action('cubewp-custom-form-data', 'edit', '&leadid=' . esc_attr($item['ID']), '&_wpnonce=' . wp_create_nonce('cwp_edit_group')));
 		$actions = [
 			'edit' => sprintf('<a href="%s">' . esc_html__('View Details', 'cubewp-forms') . '</a>', CubeWp_Submenu::_page_action('cubewp-custom-form-data', 'edit', '&leadid=' . esc_attr($item['ID']), '&_wpnonce=' . wp_create_nonce('cwp_edit_group'))),
 			'delete' => sprintf('<a href="%s">' . esc_html__('Delete', 'cubewp-forms') . '</a>', CubeWp_Submenu::_page_action('cubewp-custom-form-data', 'delete', '&leadid=' . esc_attr($item['ID']), '&_wpnonce=' . wp_create_nonce('cwp_delete_group'))),
@@ -90,7 +91,7 @@ class CubeWp_Forms_Data_Table extends WP_List_Table
 		return sprintf(
 			'<input type="checkbox" name="%1$s[]" value="%2$s" />',
 			'cwp_group_bulk_action',  // Let's simply repurpose the table's singular label ("movie").
-			$item['ID']                // The value of the checkbox should be the record's ID.
+			esc_attr($item['ID'])      // The value of the checkbox should be the record's ID.
 		);
 	}
 	protected function get_bulk_actions()

@@ -250,6 +250,11 @@ class CubeWp_Forms_Frontend_Custom_Form
 			
             global $cwpOptions;
             $data_id        = isset($_POST['cwp_custom_form']['form_data_id'])    ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['form_data_id'])) : 0;
+            // Lead ids are generated as uniqid(wp_rand()); allow only those characters.
+            $data_id        = preg_replace('/[^A-Za-z0-9]/', '', (string) $data_id);
+            if ('' === $data_id) {
+                $data_id = uniqid(wp_rand());
+            }
             $form_id        = isset($_POST['cwp_custom_form']['form_id'])    ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['form_id'])) : 0;
             $single_form    = isset($_POST['cwp_custom_form']['single_post']) ? sanitize_text_field(wp_unslash($_POST['cwp_custom_form']['single_post'])) : '';
             $author_user    = isset($_POST['cwp_custom_form']['author_user']) ? absint(wp_unslash($_POST['cwp_custom_form']['author_user'])) : 0;
